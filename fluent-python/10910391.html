@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>2. An Array of Sequences - Hi~</title><meta description="1.&amp;amp;#160;Overview of Built-In Sequences Container sequences： list, tuple, and collections.deque can hold items of different types. Flat sequences： str, byte"><meta property="og:type" content="blog"><meta property="og:title" content="2. An Array of Sequences"><meta property="og:url" content="http://liubin477.github.io/fluent-python/10910391.html"><meta property="og:site_name" content="Hi~"><meta property="og:description" content="1.&amp;amp;#160;Overview of Built-In Sequences Container sequences： list, tuple, and collections.deque can hold items of different types. Flat sequences： str, byte"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://img2018.cnblogs.com/blog/1614145/201905/1614145-20190523103232965-978209850.png"><meta property="og:image" content="https://img2018.cnblogs.com/blog/1614145/201905/1614145-20190524093628310-527095821.png"><meta property="og:image" content="https://img2018.cnblogs.com/blog/1614145/201905/1614145-20190524093711327-1163083590.png"><meta property="og:image" content="https://img2018.cnblogs.com/blog/1614145/201905/1614145-20190524145145829-407107696.png"><meta property="og:image" content="https://img2018.cnblogs.com/blog/1614145/201905/1614145-20190524145250475-1987765357.png"><meta property="og:image" content="https://img2018.cnblogs.com/blog/1614145/201905/1614145-20190524145344992-1907696320.png"><meta property="og:image" content="https://img2018.cnblogs.com/blog/1614145/201905/1614145-20190524155249603-623058837.png"><meta property="og:image" content="https://img2018.cnblogs.com/blog/1614145/201905/1614145-20190524155350802-1098357607.png"><meta property="article:published_time" content="2019-05-23T02:22:00.000Z"><meta property="article:modified_time" content="2021-07-08T09:09:53.791Z"><meta property="article:author" content="LB"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="https://img2018.cnblogs.com/blog/1614145/201905/1614145-20190523103232965-978209850.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://liubin477.github.io/fluent-python/10910391.html"},"headline":"Hi~","image":["https://img2018.cnblogs.com/blog/1614145/201905/1614145-20190523103232965-978209850.png","https://img2018.cnblogs.com/blog/1614145/201905/1614145-20190524093628310-527095821.png","https://img2018.cnblogs.com/blog/1614145/201905/1614145-20190524093711327-1163083590.png","https://img2018.cnblogs.com/blog/1614145/201905/1614145-20190524145145829-407107696.png","https://img2018.cnblogs.com/blog/1614145/201905/1614145-20190524145250475-1987765357.png","https://img2018.cnblogs.com/blog/1614145/201905/1614145-20190524145344992-1907696320.png","https://img2018.cnblogs.com/blog/1614145/201905/1614145-20190524155249603-623058837.png","https://img2018.cnblogs.com/blog/1614145/201905/1614145-20190524155350802-1098357607.png"],"datePublished":"2019-05-23T02:22:00.000Z","dateModified":"2021-07-08T09:09:53.791Z","author":{"@type":"Person","name":"LB"},"description":"1.&amp;#160;Overview of Built-In Sequences Container sequences： list, tuple, and collections.deque can hold items of different types. Flat sequences： str, byte"}</script><link rel="canonical" href="http://liubin477.github.io/fluent-python/10910391.html"><link rel="icon" href="/img/slogo.png"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-dark.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;600&amp;family=Roboto+Mono"><link rel="stylesheet" href="/css/cyberpunk.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><meta name="generator" content="Hexo 5.4.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.svg" alt="Hi~" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a><a class="navbar-item" href="/archives">归档</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Go GitHub" href="https://github.com/liubin477"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-9-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-05-23T02:22:00.000Z" title="2019-05-23T02:22:00.000Z">2019-05-23</time>发表</span><span class="level-item"><a class="link-muted" href="/categories/fluent-python/">fluent-python</a></span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">2. An Array of Sequences</h1><div class="content"><h3>1.&nbsp;Overview of Built-In Sequences</h3>
+<ul>
+<li><em>Container sequences</em>: <strong>list</strong>, <strong>tuple</strong>, and <strong>collections.deque</strong> can hold items of different types.</li>
+<li><em>Flat sequences</em>: <strong>str</strong>, <strong>bytes</strong>, <strong>bytearray</strong>, <strong>memoryview</strong>, and <strong>array.array</strong> hold items of one type.</li>
+<li><em>Mutable sequences</em>: <strong>list</strong>, <strong>bytearray</strong>, <strong>array.array</strong>, <strong>collections.deque</strong>, and <strong>memoryview</strong>.</li>
+<li><em>Immutable sequences</em>: <strong>tuple</strong>, <strong>str</strong>, and <strong>bytes</strong>.</li>
+</ul>
+<p><img src="https://img2018.cnblogs.com/blog/1614145/201905/1614145-20190523103232965-978209850.png" alt="" width="524" height="181" /></p>
+<p><strong>[Notes]</strong>:&nbsp;The built-in concrete sequence types do not actually subclass the Sequence and MutableSequence abstract base classes (ABCs) depicted, but the ABCs are still useful as a formalization of what functionality to expect from a full-featured sequence type.</p>
+<h3>2.&nbsp;List Comprehensions and Generator Expressions</h3>
+<h4>2.1&nbsp;List Comprehensions</h4>
+<div class="cnblogs_Highlighter">
+<pre class="brush:python;gutter:true;">a = 1
+t = [a for a in range(9)]  # 
+# print a  # 8 (run in python 2.7)
+print(a)  # 1 (run in python 3)
+
+<h1 id="1-List-comprehensions-generator-expressions-and-their-siblings-set"><a href="#1-List-comprehensions-generator-expressions-and-their-siblings-set" class="headerlink" title="1. List comprehensions, generator expressions, and their siblings set"></a>1. List comprehensions, generator expressions, and their siblings set</h1><h1 id="and-dict-compre‐hensions-now-have-their-own-local-scope-like-functions"><a href="#and-dict-compre‐hensions-now-have-their-own-local-scope-like-functions" class="headerlink" title="and dict compre‐hensions now have their own local scope, like functions."></a>and dict compre‐hensions now have their own local scope, like functions.</h1><p>t1 = [(i, j) for i in i_list for j in j_list]<br>t2 = [i for i in range(5) if i &gt; 2]<br></pre></p>
+</div>
+<h4>2.2&nbsp;Generator Expressions</h4>
+<ul>
+<li>Genexp saves memory because it yields items one by one using the <strong>iterator protocol</strong> instead of building a whole list just to feed another constructor.</li>
+</ul>
+<div class="cnblogs_Highlighter">
+<pre class="brush:python;gutter:true;">for item in ('%s %s' % (i, j) for i in i_list for j in j_list):
+    print(item)</pre>
+</div>
+<p><strong>[Notes]</strong>:&nbsp;In Python code, line breaks are ignored inside pairs of [], {}, or (). So you can build multiline without using \ .</p>
+<h3>&nbsp;3.&nbsp;Tuples Are Not Just Immutable Lists</h3>
+<ul>
+<li>Tuples do double duty: they can be used as immutable lists and also as records with no field names.</li>
+<li>Tuples hold records: each item in the tuple holds the data for one field and the position of the item gives its meaning.</li>
+</ul>
+<h4>3.1 Tuple Unpacking</h4>
+<div class="cnblogs_Highlighter">
+<pre class="brush:python;gutter:true;">b, a = a, b
+add(*(3, 4))
+_, t = (3, 4)  # A dummy variable
+t, _ = (3, 4)  # Not a good dummy variable
+a, *rest = [1,]  # rest = []
+*rest, a = range(3)  # rest = [0, 1]
+a, b, (c, d) = (1, 2, (3, 4))
+
+<h1 id="1-Before-Python-3-it-was-possible-to-define-functions-with-nested"><a href="#1-Before-Python-3-it-was-possible-to-define-functions-with-nested" class="headerlink" title="1. Before Python 3, it was possible to define functions with nested"></a>1. Before Python 3, it was possible to define functions with nested</h1><h1 id="tuples-in-the-formal-parameters-e-g-def-fn-a-b-c-d"><a href="#tuples-in-the-formal-parameters-e-g-def-fn-a-b-c-d" class="headerlink" title="tuples in the formal parameters (e.g., def fn(a, (b, c), d):)."></a>tuples in the formal parameters (e.g., def fn(a, (b, c), d):).</h1><h1 id="This-is-no-longer-supported-in-Python-3-function-definitions"><a href="#This-is-no-longer-supported-in-Python-3-function-definitions" class="headerlink" title="This is no longer supported in Python 3 function definitions,"></a>This is no longer supported in Python 3 function definitions,</pre></h1></div>
+<h4>&nbsp;3.2&nbsp;Named Tuples</h4>
+<ul>
+<li>Instances of a class that you build with namedtuple take exactly the same amount of memory as tuples because <strong>the field names are stored in the class</strong>. They use less memory than a regular object because they don&rsquo;t store attributes in a per-instance __dict__.</li>
+</ul>
+<div class="cnblogs_Highlighter">
+<pre class="brush:python;gutter:true;">from collections import namedtuple
+# A class name and a list of field names, which can be given
+# as an iterable of strings or as a single space-delimited string.
+City = namedtuple('City', 'name country population coordinates')
+tokyo = City('Tokyo', 'JP', 36.933, (35.689722, 139.691667))
+print tokyo.population  # 36.933
+print tokyo[0]  # Tokyo
+print City._fields  # ('name', 'country', 'population', 'coordinates')
+tmp = City._make("1234")  # iterable
+print tmp  # City(name='1', country='2', population='3', coordinates='4')
+print tmp._asdict()['country']  # 2
+print tmp._asdict().values()  # ['1', '2', '3', '4']</pre>
+</div>
+<h4>3.3&nbsp;Tuples as Immutable Lists</h4>
+<ul>
+<li>Tuple supports all list methods that do not involve <strong>adding</strong> or <strong>removing</strong> items, with one exception&mdash;tuple lacks the __reversed__ method. However, that is just for optimization; <strong>reversed(my_tuple)</strong> works without it.</li>
+</ul>
+<p><img src="https://img2018.cnblogs.com/blog/1614145/201905/1614145-20190524093628310-527095821.png" alt="" width="579" height="401" /></p>
+<p><img src="https://img2018.cnblogs.com/blog/1614145/201905/1614145-20190524093711327-1163083590.png" alt="" width="579" height="183" /></p>
+<h3>4.&nbsp;Slicing</h3>
+<h4>4.1&nbsp;Why Slices and Range Exclude the Last Item</h4>
+<ul>
+<li>It&rsquo;s easy to see the length of a slice or range when only the stop position is given. (a[:3])</li>
+<li>It&rsquo;s easy to compute the length of a slice or range when start and stop are given. (a[1: 5])</li>
+<li>It&rsquo;s easy to split a sequence in two parts at any index x, without overlapping. (a[:3] / a[3:])</li>
+</ul>
+<h4>4.2 Slice Objects</h4>
+<div class="cnblogs_Highlighter">
+<pre class="brush:python;gutter:true;">s = 'bicycle'
+print s[::3]  # bye
+print s[::-1]  # elcycib
+
+<h1 id="seq-start-stop-step-gt-seq-getitem-slice-start-stop-step"><a href="#seq-start-stop-step-gt-seq-getitem-slice-start-stop-step" class="headerlink" title="seq[start:stop:step] -&gt; seq.getitem(slice(start, stop, step))"></a>seq[start:stop:step] -&gt; seq.<strong>getitem</strong>(slice(start, stop, step))</h1><p>invoice = “””<br>0…..6……………………………40……..52…55……..<br>1909  Pimoroni PiBrella                     $17.50    3    $52.50<br>1489  6mm Tactile Switch x20                 $4.95    2     $9.90<br>1510  Panavise Jr. - PV-201                 $28.00    1    $28.00<br>“””<br>DESCRIPTION = slice(6, 40)  # assign names to slices<br>line_items = invoice.split(‘\n’)[2:]<br>for item in line_items:<br>    print item[DESCRIPTION]  # Pimoroni PiBrella</p>
+<h1 id="Mutable-sequences-can-be-grafted-excised-modified-in-place-using-slice"><a href="#Mutable-sequences-can-be-grafted-excised-modified-in-place-using-slice" class="headerlink" title="Mutable sequences can be grafted, excised, modified in place using slice"></a>Mutable sequences can be grafted, excised, modified in place using slice</h1><p>l = list(range(5))<br>l[0:2] = [9]</p>
+<h1 id="l-0-2-1-TypeError-can-only-assign-an-iterable"><a href="#l-0-2-1-TypeError-can-only-assign-an-iterable" class="headerlink" title="l[0:2] = 1  # TypeError: can only assign an iterable"></a>l[0:2] = 1  # TypeError: can only assign an iterable</h1><p>print l  # [9, 2, 3, 4]<br>del l[0:2]<br>print l  # [3, 4]<br>l[::-1] = [11, 22]<br>print l  # [22, 11]</pre></p>
+</div>
+<h3>5.&nbsp;Using + and * with Sequences</h3>
+<div class="cnblogs_Highlighter">
+<pre class="brush:python;gutter:true;">l = [1, 2, 3]
+print l * 2  # [1, 2, 3, 1, 2, 3]
+
+<h1 id="Both-and-always-create-a-new-object-and-never-change-their-operands"><a href="#Both-and-always-create-a-new-object-and-never-change-their-operands" class="headerlink" title="Both + and * always create a new object, and never change their operands"></a>Both + and * always create a new object, and never change their operands</h1><p>board = [[‘<em>‘] * 3 for i in range(3)]<br>board[1][2] = ‘X’<br>print board  # [[‘</em>‘, ‘<em>‘, ‘</em>‘], [‘<em>‘, ‘</em>‘, ‘X’], [‘<em>‘, ‘</em>‘, ‘_’]]</p>
+<h1 id="board"><a href="#board" class="headerlink" title="board = []"></a>board = []</h1><h1 id="for-i-in-range-3"><a href="#for-i-in-range-3" class="headerlink" title="for i in range(3):"></a>for i in range(3):</h1><h1 id="row-‘-’-3"><a href="#row-‘-’-3" class="headerlink" title="row = [‘_’] * 3"></a>row = [‘_’] * 3</h1><h1 id="board-append-row"><a href="#board-append-row" class="headerlink" title="board.append(row)"></a>board.append(row)</h1><p>weird_board = [[‘<em>‘] * 3] * 3<br>weird_board[1][2] = ‘X’<br>print weird_board  # [[‘</em>‘, ‘<em>‘, ‘X’], [‘</em>‘, ‘<em>‘, ‘X’], [‘</em>‘, ‘_’, ‘X’]]</p>
+<h1 id="row-‘-’-3-1"><a href="#row-‘-’-3-1" class="headerlink" title="row = [‘_’] * 3"></a>row = [‘_’] * 3</h1><h1 id="board-1"><a href="#board-1" class="headerlink" title="board = []"></a>board = []</h1><h1 id="for-i-in-range-3-1"><a href="#for-i-in-range-3-1" class="headerlink" title="for i in range(3):"></a>for i in range(3):</h1><h1 id="board-append-row-1"><a href="#board-append-row-1" class="headerlink" title="board.append(row)"></a>board.append(row)</h1><p></pre></p>
+</div>
+<h3>6. Augmented Assignment with Sequences</h3>
+<ul>
+<li>The special method that makes += work is __iadd__ (for &ldquo;in-place addition&rdquo;). However, if __iadd__ is not implemented, Python falls back to calling __add__.</li>
+<li>If a implements __iadd__, that will be called. In the case of mutable sequences, a will be changed in place (i.e., the effect will be similar to a.extend(b)). However, when a does not implement __iadd__, the expression a += b has the same effect as a = a + b: the expression a + b is evaluated first, producing a new object, which is then bound to a.</li>
+</ul>
+<div class="cnblogs_Highlighter">
+<pre class="brush:python;gutter:true;">l = [1, 2, 3]
+t = (1, 2, 3)
+print id(l)  # 4517558248
+print id(t)  # 4452583856
+l *= 2
+t *= 2
+print id(l)  # 4517558248
+print id(t)  # 4452506128
+
+<h1 id="gt-gt-gt-t-1-2-30-40"><a href="#gt-gt-gt-t-1-2-30-40" class="headerlink" title="&gt;&gt;&gt; t = (1, 2, [30, 40])"></a>&gt;&gt;&gt; t = (1, 2, [30, 40])</h1><h1 id="gt-gt-gt-t-2-50-60"><a href="#gt-gt-gt-t-2-50-60" class="headerlink" title="&gt;&gt;&gt; t[2] += [50, 60]"></a>&gt;&gt;&gt; t[2] += [50, 60]</h1><h1 id="Traceback-most-recent-call-last"><a href="#Traceback-most-recent-call-last" class="headerlink" title="Traceback (most recent call last):"></a>Traceback (most recent call last):</h1><h1 id="File-“-lt-stdin-gt-”-line-1-in-lt-module-gt"><a href="#File-“-lt-stdin-gt-”-line-1-in-lt-module-gt" class="headerlink" title="File “&lt;stdin&gt;”, line 1, in &lt;module&gt;"></a>File “&lt;stdin&gt;”, line 1, in &lt;module&gt;</h1><h1 id="TypeError-‘tuple’-object-does-not-support-item-assignment"><a href="#TypeError-‘tuple’-object-does-not-support-item-assignment" class="headerlink" title="TypeError: ‘tuple’ object does not support item assignment"></a>TypeError: ‘tuple’ object does not support item assignment</h1><h1 id="gt-gt-gt-t"><a href="#gt-gt-gt-t" class="headerlink" title="&gt;&gt;&gt; t"></a>&gt;&gt;&gt; t</h1><h1 id="1-2-30-40-50-60"><a href="#1-2-30-40-50-60" class="headerlink" title="(1, 2, [30, 40, 50, 60])"></a>(1, 2, [30, 40, 50, 60])</h1><h1 id="Put-s-a-on-TOS-Top-Of-Stack"><a href="#Put-s-a-on-TOS-Top-Of-Stack" class="headerlink" title="Put s[a] on TOS (Top Of Stack)."></a>Put s[a] on TOS (Top Of Stack).</h1><h1 id="Perform-TOS-b"><a href="#Perform-TOS-b" class="headerlink" title="Perform TOS += b."></a>Perform TOS += b.</h1><h1 id="Assign-s-a-TOS"><a href="#Assign-s-a-TOS" class="headerlink" title="Assign s[a] = TOS."></a>Assign s[a] = TOS.</h1><h1 id="gt-Augmented-assignment-is-not-an-atomic-operation"><a href="#gt-Augmented-assignment-is-not-an-atomic-operation" class="headerlink" title="-&gt; Augmented assignment is not an atomic operation"></a>-&gt; Augmented assignment is not an atomic operation</h1><p></pre></p>
+</div>
+<h3>&nbsp;7.&nbsp;list.sort and the sorted Built-In Function</h3>
+<ul>
+<li>The list.sort method sorts a list in place&mdash;that is, without making a copy. It returns None to remind us that it changes the target object, and does not create a new list.</li>
+<li>In contrast, the built-in function sorted creates a new list and returns it. In fact, it accepts any iterable object as an argument, including immutable sequences and gener‐ators. Regardless of the type of iterable given to sorted, it always returns a newly created list.
+<ul>
+<li><strong>reverse</strong>:&nbsp;If True, the items are returned in descending order.&nbsp;The default is False.</li>
+<li><strong>key</strong>:&nbsp;A one-argument function that will be applied to each item to produce its sorting key.</li>
+</ul>
+</li>
+</ul>
+<div class="cnblogs_Highlighter">
+<pre class="brush:python;gutter:true;">fruits = ['grape', 'raspberry', 'apple', 'banana']
+print sorted(fruits)  # ['apple', 'banana', 'grape', 'raspberry']
+print fruits  # ['grape', 'raspberry', 'apple', 'banana']
+print fruits.sort()  # None
+print fruits  # ['apple', 'banana', 'grape', 'raspberry']
+print sorted(fruits, key=len)  # ['apple', 'grape', 'banana', 'raspberry']
+print sorted(fruits, reverse=True, key=len)  # ['raspberry', 'banana', 'apple', 'grape']
+# It is not the reverse of the previous result because the sorting is stable
+</pre>
+</div>
+<h3>&nbsp;8.&nbsp;Managing Ordered Sequences with bisect</h3>
+<ul>
+<li><strong>bisect(haystack, needle)</strong> does a binary search for needle in haystack&mdash;which must be a sorted sequence&mdash;to locate the position where needle can be inserted while main‐taining haystack in ascending order.</li>
+<li>You could use the result of bisect(haystack, needle) as the index argument to <strong>haystack.insert(index, needle)</strong>&mdash;however, using <strong>insort</strong> does both steps, and is faster.</li>
+</ul>
+<div class="cnblogs_Highlighter">
+<pre class="brush:python;gutter:true;">import bisect
+
+<p>a = [1, 3, 5]<br>idx = bisect.bisect(a, 2)<br>a.insert(idx, 2)<br>print a  # [1, 2, 3, 5]</p>
+<p>def grade(score, breakpoints=[60, 70, 80, 90], grades=’FDCBA’):<br>    i = bisect.bisect(breakpoints, score)<br>    return grades[i]<br>print [grade(score) for score in [33, 66, 100]]  # [‘F’, ‘D’, ‘A’]</p>
+<p>bisect.insort(a, 4)<br>print a  # [1, 2, 3, 4, 5]</p>
+<h1 id="1-Once-your-sequences-are-sorted-they-can-be-very-efficiently-searched"><a href="#1-Once-your-sequences-are-sorted-they-can-be-very-efficiently-searched" class="headerlink" title="1. Once your sequences are sorted, they can be very efficiently searched."></a>1. Once your sequences are sorted, they can be very efficiently searched.</h1><h1 id="2-Their-difference-between-bisect-bisect-right-and-bisect-left-is-apparent"><a href="#2-Their-difference-between-bisect-bisect-right-and-bisect-left-is-apparent" class="headerlink" title="2. Their difference between bisect(bisect_right) and bisect_left is apparent"></a>2. Their difference between bisect(bisect_right) and bisect_left is apparent</h1><h1 id="only-when-the-needle-compares-equal-to-an-item-in-the-list"><a href="#only-when-the-needle-compares-equal-to-an-item-in-the-list" class="headerlink" title="only when the needle compares equal to an item in the list."></a>only when the needle compares equal to an item in the list.</h1><h1 id="3-so-is-insort-left"><a href="#3-so-is-insort-left" class="headerlink" title="3. so is insort_left"></a>3. so is insort_left</h1><p></pre></p>
+</div>
+<h3>&nbsp;9.&nbsp;When a List Is Not the Answer</h3>
+<h4>&nbsp;9.1&nbsp;Arrays</h4>
+<ul>
+<li>An array does not actually hold full-fledged float objects, but only the packed bytes representing their machine values&mdash;just like an array in the C language.</li>
+<li>If the list will only contain numbers, an <strong>array.array</strong> is more efficient than a list: it supports all mutable sequence operations (including .pop, .insert, and .extend), and additional methods for fast loading and saving such as .frombytes and .tofile.</li>
+<li>When creating an array, you provide a <strong>typecode</strong>, a letter to determine the underlying C type used to store each item in the array. For example, b is the typecode for signed char. If you create an array('b'), then each item will be stored in a single byte and interpreted as an integer from -128 to 127.</li>
+</ul>
+<div class="cnblogs_Highlighter">
+<pre class="brush:python;gutter:true;">from array import array
+from random import random
+floats = array('d', (random() for i in range(10**7)))  # iterable
+print floats[-1]  # 0.741274710798
+
+<p>fp = open(‘floats.bin’, ‘wb’)<br>floats.tofile(fp)<br>fp.close()</p>
+<p>floats2 = array(‘d’)<br>fp = open(‘floats.bin’, ‘rb’)<br>floats2.fromfile(fp, 10**7)<br>fp.close()<br>print floats2[-1]  # 0.741274710798</p>
+<p>print floats == floats2  # True<br></pre></p>
+</div>
+<p><strong>[Notes]</strong>: Another fast and more flexible way of saving numeric data is the pickle module for object serialization. Saving an array of floats with pickle.dump is almost as fast as with array.tofile&mdash;how‐ever, pickle handles almost all built-in types, including complex numbers, nested collections, and even instances of user-defined classes automatically (if they are not too tricky in their implemen‐tation).&nbsp;</p>
+<p><img src="https://img2018.cnblogs.com/blog/1614145/201905/1614145-20190524145145829-407107696.png" alt="" width="586" height="405" /></p>
+<p><img src="https://img2018.cnblogs.com/blog/1614145/201905/1614145-20190524145250475-1987765357.png" alt="" width="589" height="401" /></p>
+<p><img src="https://img2018.cnblogs.com/blog/1614145/201905/1614145-20190524145344992-1907696320.png" alt="" width="588" height="23" /></p>
+<h4>9.2 Memory Views</h4>
+<ul>
+<li>The built-in memorview class is a shared-memory sequence type that lets you handle slices of arrays without copying bytes.</li>
+<li>A memoryview is essentially a generalized NumPy array structure in Python itself (without the math). It allows you to share memory between data-structures (things like PIL images, SQLlite databases, NumPy arrays, etc.) without first copying. This is very important for large data sets.</li>
+</ul>
+<div class="cnblogs_Highlighter">
+<pre class="brush:python;gutter:true;">import array
+numbers = array.array('h', [-2, -1, 0, 1, 2])  # short signed integers
+memv = memoryview(numbers)
+print(len(memv))  # 5
+print(memv[0])  # -2
+
+<p>memv_oct = memv.cast(‘B’)  # unsigned char<br>print(memv_oct.tolist())  # [254, 255, 255, 255, 0, 0, 1, 0, 2, 0]<br>memv_oct[5] = 4<br>print(numbers)  # array(‘h’, [-2, -1, 1024, 1, 2])</p>
+<h1 id="1-The-memoryview-cast-method-lets-you-change-the-way-multiple-bytes"><a href="#1-The-memoryview-cast-method-lets-you-change-the-way-multiple-bytes" class="headerlink" title="1. The memoryview.cast method lets you change the way multiple bytes"></a>1. The memoryview.cast method lets you change the way multiple bytes</h1><h1 id="are-read-or-written-as-units-without-moving-bits-around-It-returns"><a href="#are-read-or-written-as-units-without-moving-bits-around-It-returns" class="headerlink" title="are read or written as units without moving bits around. It returns"></a>are read or written as units without moving bits around. It returns</h1><h1 id="yet-another-memoryview-object-always-sharing-the-same-memory"><a href="#yet-another-memoryview-object-always-sharing-the-same-memory" class="headerlink" title="yet another memoryview object, always sharing the same memory."></a>yet another memoryview object, always sharing the same memory.</h1><p></pre></p>
+</div>
+<h4>&nbsp;9.3&nbsp;NumPy and SciPy</h4>
+<ul>
+<li>NumPy implements multi-dimensional, homogeneous arrays and matrix types that hold not only numbers but also user-defined records, and provides efficient elementwise operations.</li>
+<li>SciPy is a library, written on top of NumPy, offering many scientific computing algo‐rithms from linear algebra, numerical calculus, and statistics. SciPy is fast and reliable because it leverages the widely used C and Fortran code base from the Netlib Reposi‐tory. In other words, SciPy gives scientists the best of both worlds: an interactive prompt and high-level Python APIs, together with industrial-strength number-crunching func‐tions optimized in C and Fortran.</li>
+</ul>
+<h4>9.4&nbsp;Deques and Other Queues</h4>
+<ul>
+<li>The class collections.deque is a <strong>thread-safe</strong> <strong>double-ended</strong> queue designed for fast inserting and removing from both ends. It is also the way to go if you need to keep a list of &ldquo;last seen items&rdquo; or something like that, because a deque can be bounded&mdash;i.e., created with a maximum length&mdash;and then, when it is full, it discards items from the opposite end when you append new ones.</li>
+<li>The append and popleft operations are atomic, so deque is safe to use as a LIFO queue in multithreaded applications without the need for using locks.</li>
+</ul>
+<div class="cnblogs_Highlighter">
+<pre class="brush:python;gutter:true;">from collections import deque
+dq = deque(range(10), maxlen=10)
+print dq  # deque([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], maxlen=10)
+dq.rotate(3)
+print dq  # deque([7, 8, 9, 0, 1, 2, 3, 4, 5, 6], maxlen=10)
+dq.appendleft(-1)
+print dq  # deque([-1, 7, 8, 9, 0, 1, 2, 3, 4, 5], maxlen=10)
+dq.extend([11, 22, 33])
+print dq  # deque([9, 0, 1, 2, 3, 4, 5, 11, 22, 33], maxlen=10)
+dq.extendleft([10, 20, 30, 40])
+print dq  # deque([40, 30, 20, 10, 9, 0, 1, 2, 3, 4], maxlen=10)</pre>
+</div>
+<p><img src="https://img2018.cnblogs.com/blog/1614145/201905/1614145-20190524155249603-623058837.png" alt="" width="584" height="615" />&nbsp;</p>
+<p><img src="https://img2018.cnblogs.com/blog/1614145/201905/1614145-20190524155350802-1098357607.png" alt="" width="589" height="71" /></p>
+<ul>
+<li>Besides deque, other Python standard library packages implement queues:
+<ul>
+<li>queue</li>
+<li>multiprocessing</li>
+<li>asyncio</li>
+<li>heapq</li>
+</ul>
+</li>
+</ul>
+<p>&nbsp;</p></div><div class="article-licensing box"><div class="licensing-title"><p>2. An Array of Sequences</p><p><a href="http://liubin477.github.io/fluent-python/10910391.html">http://liubin477.github.io/fluent-python/10910391.html</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>LB</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2019-05-23</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2021-07-08</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a class="icon" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a><a class="icon" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/fluent-python/10925072.html"><i class="level-item fas fa-chevron-left"></i><span class="level-item">3. Dictionaries and Sets</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/fluent-python/10906849.html"><span class="level-item">7. Function Decorators and Closures</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">评论</h3><div class="content" id="valine-thread"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script><script>new Valine({
+            el: '#valine-thread' ,
+            appId: "GU0mw61vtgkNAOuvr9Ki9jMY-gzGzoHsz",
+            appKey: "5A97TX5HLLD2F1P8OKuq6qDt",
+            placeholder: "（づ￣3￣）づ╭❤～",
+            avatar: "wavatar",
+            
+            meta: ["nick","mail","link"],
+            pageSize: 10,
+            lang: "zh-CN",
+            
+            highlight: true,
+            recordIP: true,
+            
+            
+            
+            
+            requiredFields: [],
+        });</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1 is-sticky"><div class="card widget"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/img/head.jpg" alt="LB"></figure><p class="title is-size-4 is-block line-height-inherit">LB</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>Mars</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">42</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">9</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">10</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/liubin477" target="_blank" rel="noopener">关注我</a></div><div class="level is-mobile"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/liubin477"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Twitter" href="https://twitter.com"><i class="fab fa-twitter"></i></a></div></div></div><div class="card widget" id="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><ul class="menu-list"><ul class="menu-list"><li><a class="is-flex" href="#"><span class="mr-2">1.1.1</span><span>1. Overview of Built-In Sequences</span></a></li><li><a class="is-flex" href="#"><span class="mr-2">1.1.2</span><span>2.1 List Comprehensions</span></a></li></ul></ul><li><a class="is-flex" href="#1-List-comprehensions-generator-expressions-and-their-siblings-set"><span class="mr-2">2</span><span>1. List comprehensions, generator expressions, and their siblings set</span></a></li><li><a class="is-flex" href="#and-dict-compre‐hensions-now-have-their-own-local-scope-like-functions"><span class="mr-2">3</span><span>and dict compre‐hensions now have their own local scope, like functions.</span></a><ul class="menu-list"><ul class="menu-list"><li><a class="is-flex" href="#"><span class="mr-2">3.1.1</span><span>2.2 Generator Expressions</span></a></li><li><a class="is-flex" href="#"><span class="mr-2">3.1.2</span><span>3.1 Tuple Unpacking</span></a></li></ul></ul></li><li><a class="is-flex" href="#1-Before-Python-3-it-was-possible-to-define-functions-with-nested"><span class="mr-2">4</span><span>1. Before Python 3, it was possible to define functions with nested</span></a></li><li><a class="is-flex" href="#tuples-in-the-formal-parameters-e-g-def-fn-a-b-c-d"><span class="mr-2">5</span><span>tuples in the formal parameters (e.g., def fn(a, (b, c), d):).</span></a></li><li><a class="is-flex" href="#This-is-no-longer-supported-in-Python-3-function-definitions"><span class="mr-2">6</span><span>This is no longer supported in Python 3 function definitions,</span></a><ul class="menu-list"><ul class="menu-list"><li><a class="is-flex" href="#"><span class="mr-2">6.1.1</span><span>3.3 Tuples as Immutable Lists</span></a></li><li><a class="is-flex" href="#"><span class="mr-2">6.1.2</span><span>4.2 Slice Objects</span></a></li></ul></ul></li><li><a class="is-flex" href="#seq-start-stop-step-gt-seq-getitem-slice-start-stop-step"><span class="mr-2">7</span><span>seq[start:stop:step] -&gt; seq.getitem(slice(start, stop, step))</span></a></li><li><a class="is-flex" href="#Mutable-sequences-can-be-grafted-excised-modified-in-place-using-slice"><span class="mr-2">8</span><span>Mutable sequences can be grafted, excised, modified in place using slice</span></a></li><li><a class="is-flex" href="#l-0-2-1-TypeError-can-only-assign-an-iterable"><span class="mr-2">9</span><span>l[0:2] = 1  # TypeError: can only assign an iterable</span></a><ul class="menu-list"><ul class="menu-list"><li><a class="is-flex" href="#"><span class="mr-2">9.1.1</span><span>5. Using + and * with Sequences</span></a></li></ul></ul></li><li><a class="is-flex" href="#Both-and-always-create-a-new-object-and-never-change-their-operands"><span class="mr-2">10</span><span>Both + and * always create a new object, and never change their operands</span></a></li><li><a class="is-flex" href="#board"><span class="mr-2">11</span><span>board = []</span></a></li><li><a class="is-flex" href="#for-i-in-range-3"><span class="mr-2">12</span><span>for i in range(3):</span></a></li><li><a class="is-flex" href="#row-‘-’-3"><span class="mr-2">13</span><span>row = [‘_’] * 3</span></a></li><li><a class="is-flex" href="#board-append-row"><span class="mr-2">14</span><span>board.append(row)</span></a></li><li><a class="is-flex" href="#row-‘-’-3-1"><span class="mr-2">15</span><span>row = [‘_’] * 3</span></a></li><li><a class="is-flex" href="#board-1"><span class="mr-2">16</span><span>board = []</span></a></li><li><a class="is-flex" href="#for-i-in-range-3-1"><span class="mr-2">17</span><span>for i in range(3):</span></a></li><li><a class="is-flex" href="#board-append-row-1"><span class="mr-2">18</span><span>board.append(row)</span></a><ul class="menu-list"><ul class="menu-list"><li><a class="is-flex" href="#"><span class="mr-2">18.1.1</span><span>6. Augmented Assignment with Sequences</span></a></li></ul></ul></li><li><a class="is-flex" href="#gt-gt-gt-t-1-2-30-40"><span class="mr-2">19</span><span>&gt;&gt;&gt; t = (1, 2, [30, 40])</span></a></li><li><a class="is-flex" href="#gt-gt-gt-t-2-50-60"><span class="mr-2">20</span><span>&gt;&gt;&gt; t[2] += [50, 60]</span></a></li><li><a class="is-flex" href="#Traceback-most-recent-call-last"><span class="mr-2">21</span><span>Traceback (most recent call last):</span></a></li><li><a class="is-flex" href="#File-“-lt-stdin-gt-”-line-1-in-lt-module-gt"><span class="mr-2">22</span><span>File “&lt;stdin&gt;”, line 1, in &lt;module&gt;</span></a></li><li><a class="is-flex" href="#TypeError-‘tuple’-object-does-not-support-item-assignment"><span class="mr-2">23</span><span>TypeError: ‘tuple’ object does not support item assignment</span></a></li><li><a class="is-flex" href="#gt-gt-gt-t"><span class="mr-2">24</span><span>&gt;&gt;&gt; t</span></a></li><li><a class="is-flex" href="#1-2-30-40-50-60"><span class="mr-2">25</span><span>(1, 2, [30, 40, 50, 60])</span></a></li><li><a class="is-flex" href="#Put-s-a-on-TOS-Top-Of-Stack"><span class="mr-2">26</span><span>Put s[a] on TOS (Top Of Stack).</span></a></li><li><a class="is-flex" href="#Perform-TOS-b"><span class="mr-2">27</span><span>Perform TOS += b.</span></a></li><li><a class="is-flex" href="#Assign-s-a-TOS"><span class="mr-2">28</span><span>Assign s[a] = TOS.</span></a></li><li><a class="is-flex" href="#gt-Augmented-assignment-is-not-an-atomic-operation"><span class="mr-2">29</span><span>-&gt; Augmented assignment is not an atomic operation</span></a><ul class="menu-list"><ul class="menu-list"><li><a class="is-flex" href="#"><span class="mr-2">29.1.1</span><span> 7. list.sort and the sorted Built-In Function</span></a></li><li><a class="is-flex" href="#"><span class="mr-2">29.1.2</span><span> 8. Managing Ordered Sequences with bisect</span></a></li></ul></ul></li><li><a class="is-flex" href="#1-Once-your-sequences-are-sorted-they-can-be-very-efficiently-searched"><span class="mr-2">30</span><span>1. Once your sequences are sorted, they can be very efficiently searched.</span></a></li><li><a class="is-flex" href="#2-Their-difference-between-bisect-bisect-right-and-bisect-left-is-apparent"><span class="mr-2">31</span><span>2. Their difference between bisect(bisect_right) and bisect_left is apparent</span></a></li><li><a class="is-flex" href="#only-when-the-needle-compares-equal-to-an-item-in-the-list"><span class="mr-2">32</span><span>only when the needle compares equal to an item in the list.</span></a></li><li><a class="is-flex" href="#3-so-is-insort-left"><span class="mr-2">33</span><span>3. so is insort_left</span></a><ul class="menu-list"><ul class="menu-list"><li><a class="is-flex" href="#"><span class="mr-2">33.1.1</span><span>9.2 Memory Views</span></a></li></ul></ul></li><li><a class="is-flex" href="#1-The-memoryview-cast-method-lets-you-change-the-way-multiple-bytes"><span class="mr-2">34</span><span>1. The memoryview.cast method lets you change the way multiple bytes</span></a></li><li><a class="is-flex" href="#are-read-or-written-as-units-without-moving-bits-around-It-returns"><span class="mr-2">35</span><span>are read or written as units without moving bits around. It returns</span></a></li><li><a class="is-flex" href="#yet-another-memoryview-object-always-sharing-the-same-memory"><span class="mr-2">36</span><span>yet another memoryview object, always sharing the same memory.</span></a><ul class="menu-list"><ul class="menu-list"><li><a class="is-flex" href="#"><span class="mr-2">36.1.1</span><span>9.4 Deques and Other Queues</span></a></li></ul></ul></li></ul></div></div><style>.menu-list > li > a.is-active + .menu-list { display: block; }.menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.svg" alt="Hi~" height="28"></a><p class="size-small"><span>&copy; 2021 LB</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="fab fa-creative-commons-nc"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: false,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>
