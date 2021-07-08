@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>7. Function Decorators and Closures - Hi~</title><meta description="A decorator is a callable that takes another function as argument (the decorated function). The decorator may perform some processing with the decorat"><meta property="og:type" content="blog"><meta property="og:title" content="7. Function Decorators and Closures"><meta property="og:url" content="http://liubin477.github.io/2019/05/22/fluent-python/10906849/"><meta property="og:site_name" content="Hi~"><meta property="og:description" content="A decorator is a callable that takes another function as argument (the decorated function). The decorator may perform some processing with the decorat"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://img2018.cnblogs.com/blog/1614145/201905/1614145-20190522170812094-37549099.png"><meta property="article:published_time" content="2019-05-22T08:43:00.000Z"><meta property="article:modified_time" content="2021-07-08T09:02:26.102Z"><meta property="article:author" content="LB"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="https://img2018.cnblogs.com/blog/1614145/201905/1614145-20190522170812094-37549099.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://liubin477.github.io/2019/05/22/fluent-python/10906849/"},"headline":"Hi~","image":["https://img2018.cnblogs.com/blog/1614145/201905/1614145-20190522170812094-37549099.png"],"datePublished":"2019-05-22T08:43:00.000Z","dateModified":"2021-07-08T09:02:26.102Z","author":{"@type":"Person","name":"LB"},"description":"A decorator is a callable that takes another function as argument (the decorated function). The decorator may perform some processing with the decorat"}</script><link rel="canonical" href="http://liubin477.github.io/2019/05/22/fluent-python/10906849/"><link rel="icon" href="/img/slogo.png"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-dark.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;600&amp;family=Roboto+Mono"><link rel="stylesheet" href="/css/cyberpunk.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><meta name="generator" content="Hexo 5.4.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.svg" alt="Hi~" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a><a class="navbar-item" href="/archives">归档</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Go GitHub" href="https://github.com/liubin477"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-9-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-05-22T08:43:00.000Z" title="2019-05-22T08:43:00.000Z">2019-05-22</time>发表</span><span class="level-item"><a class="link-muted" href="/categories/fluent-python/">fluent-python</a></span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">7. Function Decorators and Closures</h1><div class="content"><ul>
+<li>A decorator is a callable that takes another function as argument (the decorated function). The decorator may perform some processing with the decorated function, and returns it or replaces it with another function or callable object.</li>
+</ul>
+<h3>1.&nbsp;Variable Scope Rules</h3>
+<div class="cnblogs_Highlighter">
+<pre class="brush:python;gutter:true;">b = 6
+def f1(a):
+    print(a)  # 3
+    print(b)  # 6
+f1(3)
+</pre>
+</div>
+<p>&nbsp;</p>
+<div class="cnblogs_Highlighter">
+<pre class="brush:python;gutter:true;">b = 6
+def f2(a):
+    print(a)  # 3
+    print(b)  # UnboundLocalError: local variable 'b' referenced before assignment
+    b = 9  
+f2(3)
+
+<h1 id="1-When-Python-compiles-the-body-of-the-function-it-decides-that-b-is-a-local"><a href="#1-When-Python-compiles-the-body-of-the-function-it-decides-that-b-is-a-local" class="headerlink" title="1. When Python compiles the body of the function, it decides that b is a local"></a>1. When Python compiles the body of the function, it decides that b is a local</h1><h1 id="variable-because-it’s-assigned-within-the-function"><a href="#variable-because-it’s-assigned-within-the-function" class="headerlink" title="variable because it’s assigned within the function."></a>variable because it’s assigned within the function.</h1><h1 id="2-Python-does-not-require-you-to-declare-variables-but-assumes-that-a-variable"><a href="#2-Python-does-not-require-you-to-declare-variables-but-assumes-that-a-variable" class="headerlink" title="2. Python does not require you to declare variables, but assumes that a variable"></a>2. Python does not require you to declare variables, but assumes that a variable</h1><h1 id="assigned-in-the-body-of-a-function-is-local"><a href="#assigned-in-the-body-of-a-function-is-local" class="headerlink" title="assigned in the body of a function is local"></a>assigned in the body of a function is local</h1><p></pre></p>
+</div>
+<p>&nbsp;</p>
+<div class="cnblogs_Highlighter">
+<pre class="brush:python;gutter:true;">b = 6
+def f3(a):
+    global b  # declare
+    print(a)  # 3
+    print(b)  # 6
+    b = 9  
+f3(3)
+</pre>
+</div>
+<h3>&nbsp;2. Closures</h3>
+<ul>
+<li>Actually, a closure is a function with an extended scope that encompasses nonglobal variables referenced in the body of the function but not defined there. It does not matter whether the function is anonymous or not; what matters is that <strong>it can access nonglobal variables that are defined outside of its body</strong>.&nbsp;</li>
+<li>A closure is a function that retains the bindings of the <strong>free variables</strong> that exist when the function is defined, so that they can be used later when the function is invoked and the defining scope is no longer available.</li>
+<li>The only situation in which a function may need to deal with external variables that are nonglobal is when it is <strong>nested</strong> in another function.</li>
+</ul>
+<div class="cnblogs_Highlighter">
+<pre class="brush:python;gutter:true;">def make_averager():
+    series = []
+    def averager(new_value):
+        series.append(new_value)
+        total = sum(series)
+        return total / len(series)
+    return averager
+
+<p>avg = make_averager()<br>print avg(10)  # 10<br>print avg(12)  # 11<br>print avg(14)  # 12<br>print avg.<strong>code</strong>.co_varnames  # (‘new_value’, ‘total’)<br>print avg.<strong>code</strong>.co_freevars  # (‘series’,)<br>print avg.<strong>closure</strong>  # (&lt;cell at 0x1030d1280: list object at 0x1030a97e8&gt;,)<br>print avg.<strong>closure</strong>[0].cell_contents  # [10, 12, 14]</pre></p>
+</div>
+<p><img style="border: 1px solid black;" src="https://img2018.cnblogs.com/blog/1614145/201905/1614145-20190522170812094-37549099.png" alt="" /></p>
+<ul>
+<li><strong>free variable</strong>: a variable that is not bound in the local scope.</li>
+</ul>
+<h3>3.&nbsp;The nonlocal Declaration</h3>
+<div class="cnblogs_Highlighter">
+<pre class="brush:python;gutter:true;">def make_averager():
+    count = 0
+    total = 0
+    def averager(new_value):
+        count += 1
+        total += new_value
+        return total / count
+    return averager
+
+<p>avg = make_averager()<br>print avg(10)  # UnboundLocalError: local variable ‘count’ referenced before assignment</p>
+<h1 id="1-We-actually-assign-count-in-the-body-of-averager-and-that-makes-it-a-local-variable"><a href="#1-We-actually-assign-count-in-the-body-of-averager-and-that-makes-it-a-local-variable" class="headerlink" title="1. We actually assign count in the body of averager, and that makes it a local variable."></a>1. We actually assign count in the body of averager, and that makes it a local variable.</h1><h1 id="2-We-didn’t-have-this-problem-before-because-we-never-assigned-to-the-series-name"><a href="#2-We-didn’t-have-this-problem-before-because-we-never-assigned-to-the-series-name" class="headerlink" title="2. We didn’t have this problem before, because we never assigned to the series name,"></a>2. We didn’t have this problem before, because we never assigned to the series name,</h1><h1 id="we-only-called-series-append-and-invoked-sum-and-len-on-it"><a href="#we-only-called-series-append-and-invoked-sum-and-len-on-it" class="headerlink" title="we only called series.append and invoked sum and len on it."></a>we only called series.append and invoked sum and len on it.</h1><h1 id="3-With-immutable-types-if-you-try-to-rebind-them-then-you-are-implicitly-creating-a"><a href="#3-With-immutable-types-if-you-try-to-rebind-them-then-you-are-implicitly-creating-a" class="headerlink" title="3. With immutable types, if you try to rebind them, then you are implicitly creating a"></a>3. With immutable types, if you try to rebind them, then you are implicitly creating a</h1><h1 id="local-variable-it’s-no-longer-a-free-variable-therefore-it-is-not-saved-in-the-closure"><a href="#local-variable-it’s-no-longer-a-free-variable-therefore-it-is-not-saved-in-the-closure" class="headerlink" title="local variable, it’s no longer a free variable, therefore it is not saved in the closure."></a>local variable, it’s no longer a free variable, therefore it is not saved in the closure.</h1><p></pre></p>
+</div>
+<p>&nbsp;</p>
+<div class="cnblogs_Highlighter">
+<pre class="brush:python;gutter:true;">def make_averager():
+    count = 0
+    total = 0
+    def averager(new_value):
+        nonlocal count, total  #  **********
+        count += 1
+        total += new_value
+        return total / count
+    return averager
+
+<p>avg = make_averager()<br>print(avg(10))  # 10.0</p>
+<h1 id="1-The-nonlocal-declaration-was-introduced-in-Python-3-It-lets-you-flag-a-variable-as-a"><a href="#1-The-nonlocal-declaration-was-introduced-in-Python-3-It-lets-you-flag-a-variable-as-a" class="headerlink" title="1. The nonlocal declaration was introduced in Python 3. It lets you flag a variable as a"></a>1. The nonlocal declaration was introduced in Python 3. It lets you flag a variable as a</h1><h1 id="free-variable-even-when-it-is-assigned-a-new-value-within-the-function"><a href="#free-variable-even-when-it-is-assigned-a-new-value-within-the-function" class="headerlink" title="free variable even when it is assigned a new value within the function."></a>free variable even when it is assigned a new value within the function.</h1><p></pre></p>
+</div>
+<h3>&nbsp;4.&nbsp;Implementing a Simple Decorator</h3>
+<ul>
+<li><strong>Typical behavior of a decorator</strong>: It replaces the decorated function with a new function that accepts the same arguments and (usually) returns whatever the decorated function was supposed to return, while also doing some extra processing.</li>
+</ul>
+<div class="cnblogs_Highlighter">
+<pre class="brush:python;gutter:true;">def deco(func):
+    print('running deco()')
+    print('func -&gt; %s' % str(func))
+    def inner():
+        print('running inner()')
+    return inner
+ 
+<p>@deco  # target = deco(target)<br>def target():<br>    print(‘running target()’)</p>
+<p>target()</p>
+<h1 id="running-deco-executed-immediately-when-the-module-is-loaded"><a href="#running-deco-executed-immediately-when-the-module-is-loaded" class="headerlink" title="running deco()  # executed immediately when the module is loaded"></a>running deco()  # executed immediately when the module is loaded</h1><h1 id="func-gt-lt-function-target-at-0x106c460c8-gt"><a href="#func-gt-lt-function-target-at-0x106c460c8-gt" class="headerlink" title="func -&gt; &lt;function target at 0x106c460c8&gt;"></a>func -&gt; &lt;function target at 0x106c460c8&gt;</h1><h1 id="running-inner"><a href="#running-inner" class="headerlink" title="running inner()"></a>running inner()</h1><p>print(target.<strong>name</strong>)  # inner (function is replaced)<br></pre></p>
+</div>
+<p>&nbsp;</p>
+<div class="cnblogs_Highlighter">
+<pre class="brush:python;gutter:true;">import time
+FMT = '[{elapsed:0.8f}s] {name}({arg_str}) -&gt; {result}'
+def clock(func):
+    def clocked(*args, **kwargs):
+        t0 = time.time()
+        result = func(*args, **kwargs)
+        elapsed = time.time() - t0  # 用时
+        name = func.__name__
+        arg_lst = []
+        if args:
+            arg_lst.append(', '.join(repr(arg) for arg in args))
+        if kwargs:
+            pairs = ['%s=%r' % (k, w) for k, w in sorted(kwargs.items())]
+            arg_lst.append(', '.join(pairs))
+        arg_str = ', '.join(arg_lst)
+        print(FMT.format(**locals()))  # any local variable of clocked
+        return result
+    return clocked
+
+<p>@clock<br>def snooze(seconds):<br>    time.sleep(seconds)</p>
+<p>@clock<br>def factorial(n):<br>    return 1 if n &lt; 2 else n*factorial(n-1)</p>
+<p>print(‘<em>‘ * 40, ‘Calling snooze(.123)’)<br>snooze(.123)<br>print(‘</em>‘ * 40, ‘Calling factorial(6)’)<br>print(‘6! =’, factorial(6))</p>
+<h1 id="‘-’-‘Calling-snooze-123-’"><a href="#‘-’-‘Calling-snooze-123-’" class="headerlink" title="(‘****************************************’, ‘Calling snooze(.123)’)"></a>(‘****************************************’, ‘Calling snooze(.123)’)</h1><h1 id="0-12694907s-snooze-0-123-gt-None"><a href="#0-12694907s-snooze-0-123-gt-None" class="headerlink" title="[0.12694907s] snooze(0.123) -&gt; None"></a>[0.12694907s] snooze(0.123) -&gt; None</h1><h1 id="‘-’-‘Calling-factorial-6-’"><a href="#‘-’-‘Calling-factorial-6-’" class="headerlink" title="(‘****************************************’, ‘Calling factorial(6)’)"></a>(‘****************************************’, ‘Calling factorial(6)’)</h1><h1 id="0-00000286s-factorial-1-gt-1"><a href="#0-00000286s-factorial-1-gt-1" class="headerlink" title="[0.00000286s] factorial(1) -&gt; 1"></a>[0.00000286s] factorial(1) -&gt; 1</h1><h1 id="0-00004411s-factorial-2-gt-2"><a href="#0-00004411s-factorial-2-gt-2" class="headerlink" title="[0.00004411s] factorial(2) -&gt; 2"></a>[0.00004411s] factorial(2) -&gt; 2</h1><h1 id="0-00005984s-factorial-3-gt-6"><a href="#0-00005984s-factorial-3-gt-6" class="headerlink" title="[0.00005984s] factorial(3) -&gt; 6"></a>[0.00005984s] factorial(3) -&gt; 6</h1><h1 id="0-00007296s-factorial-4-gt-24"><a href="#0-00007296s-factorial-4-gt-24" class="headerlink" title="[0.00007296s] factorial(4) -&gt; 24"></a>[0.00007296s] factorial(4) -&gt; 24</h1><h1 id="0-00014281s-factorial-5-gt-120"><a href="#0-00014281s-factorial-5-gt-120" class="headerlink" title="[0.00014281s] factorial(5) -&gt; 120"></a>[0.00014281s] factorial(5) -&gt; 120</h1><h1 id="0-00015783s-factorial-6-gt-720"><a href="#0-00015783s-factorial-6-gt-720" class="headerlink" title="[0.00015783s] factorial(6) -&gt; 720"></a>[0.00015783s] factorial(6) -&gt; 720</h1><h1 id="‘6-’-720"><a href="#‘6-’-720" class="headerlink" title="(‘6! =’, 720)"></a>(‘6! =’, 720)</pre></h1></div>
+<h3>&nbsp;5.&nbsp;Decorators in the Standard Library</h3>
+<h4>5.1&nbsp;functools.wraps</h4>
+<div class="cnblogs_Highlighter">
+<pre class="brush:python;gutter:true;">import functools
+def deco(func):
+    @functools.wraps(func)  # copy the relevant attributes from func to inner
+    def inner():
+        print('running inner()')
+    return inner
+ 
+<p>@deco<br>def target():<br>    “””i’m target”””<br>    print(‘running target()’)</p>
+<p>target()  # running inner()<br>print(target.<strong>name</strong>)  # target<br>print(target.<strong>doc</strong>)  # i’m target<br></pre></p>
+</div>
+<h4>&nbsp;5.2&nbsp;functools.lru_cache</h4>
+<ul>
+<li>An optimization technique that works by saving the results of previous invocations of an expensive function, avoiding repeat computations on previously used arguments.</li>
+<li>The cache is limited by discarding the entries that have not been read for a while.</li>
+</ul>
+<div class="cnblogs_Highlighter">
+<pre class="brush:python;gutter:true;">import functools
+@functools.lru_cache()  # Python 3
+@clock
+def fibonacci(n):
+    if n &lt; 2:
+        return n
+    return fibonacci(n-2) + fibonacci(n-1)
+
+<p>print(fibonacci(6))</p>
+<h1 id="0-00000095s-fibonacci-0-gt-0"><a href="#0-00000095s-fibonacci-0-gt-0" class="headerlink" title="[0.00000095s] fibonacci(0) -&gt; 0"></a>[0.00000095s] fibonacci(0) -&gt; 0</h1><h1 id="0-00000215s-fibonacci-1-gt-1"><a href="#0-00000215s-fibonacci-1-gt-1" class="headerlink" title="[0.00000215s] fibonacci(1) -&gt; 1"></a>[0.00000215s] fibonacci(1) -&gt; 1</h1><h1 id="0-00036097s-fibonacci-2-gt-1"><a href="#0-00036097s-fibonacci-2-gt-1" class="headerlink" title="[0.00036097s] fibonacci(2) -&gt; 1"></a>[0.00036097s] fibonacci(2) -&gt; 1</h1><h1 id="0-00000167s-fibonacci-3-gt-2"><a href="#0-00000167s-fibonacci-3-gt-2" class="headerlink" title="[0.00000167s] fibonacci(3) -&gt; 2"></a>[0.00000167s] fibonacci(3) -&gt; 2</h1><h1 id="0-00039101s-fibonacci-4-gt-3"><a href="#0-00039101s-fibonacci-4-gt-3" class="headerlink" title="[0.00039101s] fibonacci(4) -&gt; 3"></a>[0.00039101s] fibonacci(4) -&gt; 3</h1><h1 id="0-00000095s-fibonacci-5-gt-5"><a href="#0-00000095s-fibonacci-5-gt-5" class="headerlink" title="[0.00000095s] fibonacci(5) -&gt; 5"></a>[0.00000095s] fibonacci(5) -&gt; 5</h1><h1 id="0-00041699s-fibonacci-6-gt-8"><a href="#0-00041699s-fibonacci-6-gt-8" class="headerlink" title="[0.00041699s] fibonacci(6) -&gt; 8"></a>[0.00041699s] fibonacci(6) -&gt; 8</h1><h1 id="8"><a href="#8" class="headerlink" title="8"></a>8</h1><h1 id="functools-lru-cache-maxsize-128-typed-False"><a href="#functools-lru-cache-maxsize-128-typed-False" class="headerlink" title="@functools.lru_cache(maxsize=128, typed=False)"></a>@functools.lru_cache(maxsize=128, typed=False)</h1><h1 id="maxsize-how-many-call-results-are-stored-should-be-a-power-of-2"><a href="#maxsize-how-many-call-results-are-stored-should-be-a-power-of-2" class="headerlink" title="maxsize: how many call results are stored. (should be a power of 2)"></a>maxsize: how many call results are stored. (should be a power of 2)</h1><h1 id="typed-True-gt-store-results-of-different-argument-types-separately-1-1-0"><a href="#typed-True-gt-store-results-of-different-argument-types-separately-1-1-0" class="headerlink" title="typed: True -&gt; store results of different argument types separately (1 / 1.0)"></a>typed: True -&gt; store results of different argument types separately (1 / 1.0)</h1><h1 id="False-gt-don’t-store"><a href="#False-gt-don’t-store" class="headerlink" title="False -&gt; don’t store"></a>False -&gt; don’t store</h1><h1 id="notes-lru-cache-uses-a-dict-to-store-the-results-all-the-arguments"><a href="#notes-lru-cache-uses-a-dict-to-store-the-results-all-the-arguments" class="headerlink" title="[notes]: lru_cache uses a dict to store the results, all the arguments"></a>[notes]: lru_cache uses a dict to store the results, all the arguments</h1><h1 id="taken-by-the-decorated-function-must-be-hashable"><a href="#taken-by-the-decorated-function-must-be-hashable" class="headerlink" title="taken by the decorated function must be hashable."></a>taken by the decorated function must be hashable.</pre></h1></div>
+<h4>&nbsp;5.3&nbsp;functools.singledispatch</h4>
+<ul>
+<li>The new functools.singledispatch decorator in Python 3.4 allows each module to contribute to the overall solution, and lets you easily provide a specialized function even for classes that you can&rsquo;t edit.</li>
+<li>If you decorate a plain function with @singledispatch, it becomes a generic function: <strong>a group of functions to perform the same operation in different ways, depending on the type of the first argument.</strong></li>
+</ul>
+<div class="cnblogs_Highlighter">
+<pre class="brush:python;gutter:true;">from functools import singledispatch
+from collections import abc
+import numbers
+import html
+
+<p>@singledispatch  # mark the base function handles the obj type.<br>def htmlize(obj):<br>    content = html.escape(repr(obj))<br>    return ‘&lt;pre&gt;{}&lt;/pre&gt;’.format(content)</p>
+<p>@htmlize.register(str)  # @&laquo;base_function&raquo;.register(&laquo;type&raquo;).<br>def _(text):  # name of the specialized functions is irrelevant<br>    return ‘&lt;p&gt;{0}&lt;/p&gt;’.format(html.escape(text))</p>
+<p>@htmlize.register(numbers.Integral)<br>def _(n):<br>    return ‘&lt;pre&gt;{0} (0x{0:x})&lt;/pre&gt;’.format(n)</p>
+<p>@htmlize.register(tuple)<br>@htmlize.register(abc.MutableSequence)<br>def _(seq):<br>    inner = ‘&lt;/li&gt;\n&lt;li&gt;’.join(htmlize(item) for item in seq)<br>    return ‘&lt;ul&gt;\n&lt;li&gt;’ + inner + ‘&lt;/li&gt;\n&lt;/ul&gt;’</p>
+<p>print(htmlize(str))  # &lt;pre&gt;&lt;class ‘str’&gt;&lt;/pre&gt;<br>print(htmlize(‘&lt;hello&gt;’))  # &lt;p&gt;&lt;hello&gt;&lt;/p&gt;<br>print(htmlize(10))  # &lt;pre&gt;10 (0xa)&lt;/pre&gt;<br>print(htmlize([‘alpha’, {3, 2, 1}]))</p>
+<h1 id="lt-ul-gt"><a href="#lt-ul-gt" class="headerlink" title="&lt;ul&gt;"></a>&lt;ul&gt;</h1><h1 id="lt-li-gt-lt-p-gt-alpha-lt-p-gt-lt-li-gt"><a href="#lt-li-gt-lt-p-gt-alpha-lt-p-gt-lt-li-gt" class="headerlink" title="&lt;li&gt;&lt;p&gt;alpha&lt;/p&gt;&lt;/li&gt;"></a>&lt;li&gt;&lt;p&gt;alpha&lt;/p&gt;&lt;/li&gt;</h1><h1 id="lt-li-gt-lt-pre-gt-1-2-3-lt-pre-gt-lt-li-gt"><a href="#lt-li-gt-lt-pre-gt-1-2-3-lt-pre-gt-lt-li-gt" class="headerlink" title="&lt;li&gt;&lt;pre&gt;{1, 2, 3}&lt;/pre&gt;&lt;/li&gt;"></a>&lt;li&gt;&lt;pre&gt;{1, 2, 3}&lt;/pre&gt;&lt;/li&gt;</h1><h1 id="lt-ul-gt-1"><a href="#lt-ul-gt-1" class="headerlink" title="&lt;/ul&gt;"></a>&lt;/ul&gt;</h1><h1 id="1-Register-the-specialized-functions-to-handle-ABCs-abstract-classes"><a href="#1-Register-the-specialized-functions-to-handle-ABCs-abstract-classes" class="headerlink" title="1. Register the specialized functions to handle ABCs (abstract classes)"></a>1. Register the specialized functions to handle ABCs (abstract classes)</h1><h1 id="instead-of-concrete-implementations-like-int-and-list-support-more"><a href="#instead-of-concrete-implementations-like-int-and-list-support-more" class="headerlink" title="instead of concrete implementations like int and list. (support more)"></a>instead of concrete implementations like int and list. (support more)</h1><h1 id="2-A-notable-quality-of-the-singledispatch-mechanism-is-that-you-can"><a href="#2-A-notable-quality-of-the-singledispatch-mechanism-is-that-you-can" class="headerlink" title="2. A notable quality of the singledispatch mechanism is that you can"></a>2. A notable quality of the singledispatch mechanism is that you can</h1><h1 id="register-specialized-functions-anywhere-in-the-system-in-any-module"><a href="#register-specialized-functions-anywhere-in-the-system-in-any-module" class="headerlink" title="register specialized functions anywhere in the system, in any module."></a>register specialized functions anywhere in the system, in any module.</h1><p></pre></p>
+</div>
+<h3>&nbsp;6.&nbsp;Stacked Decorators</h3>
+<div class="cnblogs_Highlighter">
+<pre class="brush:python;gutter:true;">@d1
+@d2
+def f():
+    print('f')
+
+<h1 id="f-d1-d2-f"><a href="#f-d1-d2-f" class="headerlink" title="f = d1(d2(f))"></a>f = d1(d2(f))</h1><p></pre></p>
+</div>
+<h3>&nbsp;7.&nbsp;Parameterized Decorators</h3>
+<ul>
+<li>Make a decorator factory that takes those arguments and returns a decorator, which is then applied to the function to be decorated.</li>
+</ul>
+<div class="cnblogs_Highlighter">
+<pre class="brush:python;gutter:true;">def outter(a=1):
+    def deco(func):
+        def inner():
+            if a == 1:
+                print(1)
+            else:
+                print(a)
+        return inner
+    return deco
+ 
+<p>@outter()<br>def target1():<br>    pass</p>
+<p>@outter(9)<br>def target2():<br>    pass</p>
+<p>target1()  # 1<br>target2()  # 9<br></pre></p>
+</div>
+<p>&nbsp;</p></div><div class="article-licensing box"><div class="licensing-title"><p>7. Function Decorators and Closures</p><p><a href="http://liubin477.github.io/2019/05/22/fluent-python/10906849/">http://liubin477.github.io/2019/05/22/fluent-python/10906849/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>LB</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2019-05-22</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2021-07-08</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a class="icon" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a><a class="icon" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2019/05/23/fluent-python/10910391/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">2. An Array of Sequences</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2019/05/22/fluent-python/10904531/"><span class="level-item">6. Design Patterns with First-Class Functions</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">评论</h3><div class="content" id="valine-thread"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script><script>new Valine({
+            el: '#valine-thread' ,
+            appId: "GU0mw61vtgkNAOuvr9Ki9jMY-gzGzoHsz",
+            appKey: "5A97TX5HLLD2F1P8OKuq6qDt",
+            placeholder: "（づ￣3￣）づ╭❤～",
+            avatar: "wavatar",
+            
+            meta: ["nick","mail","link"],
+            pageSize: 10,
+            lang: "zh-CN",
+            
+            highlight: true,
+            recordIP: true,
+            
+            
+            
+            
+            requiredFields: [],
+        });</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1 is-sticky"><div class="card widget"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/img/head.jpg" alt="LB"></figure><p class="title is-size-4 is-block line-height-inherit">LB</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>Mars</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">42</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">9</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">10</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/liubin477" target="_blank" rel="noopener">关注我</a></div><div class="level is-mobile"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/liubin477"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Twitter" href="https://twitter.com"><i class="fab fa-twitter"></i></a></div></div></div><div class="card widget" id="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><ul class="menu-list"><ul class="menu-list"><li><a class="is-flex" href="#"><span class="mr-2">1.1.1</span><span>1. Variable Scope Rules</span></a></li></ul></ul><li><a class="is-flex" href="#1-When-Python-compiles-the-body-of-the-function-it-decides-that-b-is-a-local"><span class="mr-2">2</span><span>1. When Python compiles the body of the function, it decides that b is a local</span></a></li><li><a class="is-flex" href="#variable-because-it’s-assigned-within-the-function"><span class="mr-2">3</span><span>variable because it’s assigned within the function.</span></a></li><li><a class="is-flex" href="#2-Python-does-not-require-you-to-declare-variables-but-assumes-that-a-variable"><span class="mr-2">4</span><span>2. Python does not require you to declare variables, but assumes that a variable</span></a></li><li><a class="is-flex" href="#assigned-in-the-body-of-a-function-is-local"><span class="mr-2">5</span><span>assigned in the body of a function is local</span></a><ul class="menu-list"><ul class="menu-list"><li><a class="is-flex" href="#"><span class="mr-2">5.1.1</span><span> 2. Closures</span></a></li><li><a class="is-flex" href="#"><span class="mr-2">5.1.2</span><span>3. The nonlocal Declaration</span></a></li></ul></ul></li><li><a class="is-flex" href="#1-We-actually-assign-count-in-the-body-of-averager-and-that-makes-it-a-local-variable"><span class="mr-2">6</span><span>1. We actually assign count in the body of averager, and that makes it a local variable.</span></a></li><li><a class="is-flex" href="#2-We-didn’t-have-this-problem-before-because-we-never-assigned-to-the-series-name"><span class="mr-2">7</span><span>2. We didn’t have this problem before, because we never assigned to the series name,</span></a></li><li><a class="is-flex" href="#we-only-called-series-append-and-invoked-sum-and-len-on-it"><span class="mr-2">8</span><span>we only called series.append and invoked sum and len on it.</span></a></li><li><a class="is-flex" href="#3-With-immutable-types-if-you-try-to-rebind-them-then-you-are-implicitly-creating-a"><span class="mr-2">9</span><span>3. With immutable types, if you try to rebind them, then you are implicitly creating a</span></a></li><li><a class="is-flex" href="#local-variable-it’s-no-longer-a-free-variable-therefore-it-is-not-saved-in-the-closure"><span class="mr-2">10</span><span>local variable, it’s no longer a free variable, therefore it is not saved in the closure.</span></a></li><li><a class="is-flex" href="#1-The-nonlocal-declaration-was-introduced-in-Python-3-It-lets-you-flag-a-variable-as-a"><span class="mr-2">11</span><span>1. The nonlocal declaration was introduced in Python 3. It lets you flag a variable as a</span></a></li><li><a class="is-flex" href="#free-variable-even-when-it-is-assigned-a-new-value-within-the-function"><span class="mr-2">12</span><span>free variable even when it is assigned a new value within the function.</span></a><ul class="menu-list"><ul class="menu-list"><li><a class="is-flex" href="#"><span class="mr-2">12.1.1</span><span> 4. Implementing a Simple Decorator</span></a></li></ul></ul></li><li><a class="is-flex" href="#running-deco-executed-immediately-when-the-module-is-loaded"><span class="mr-2">13</span><span>running deco()  # executed immediately when the module is loaded</span></a></li><li><a class="is-flex" href="#func-gt-lt-function-target-at-0x106c460c8-gt"><span class="mr-2">14</span><span>func -&gt; &lt;function target at 0x106c460c8&gt;</span></a></li><li><a class="is-flex" href="#running-inner"><span class="mr-2">15</span><span>running inner()</span></a></li><li><a class="is-flex" href="#‘-’-‘Calling-snooze-123-’"><span class="mr-2">16</span><span>(‘****************************************’, ‘Calling snooze(.123)’)</span></a></li><li><a class="is-flex" href="#0-12694907s-snooze-0-123-gt-None"><span class="mr-2">17</span><span>[0.12694907s] snooze(0.123) -&gt; None</span></a></li><li><a class="is-flex" href="#‘-’-‘Calling-factorial-6-’"><span class="mr-2">18</span><span>(‘****************************************’, ‘Calling factorial(6)’)</span></a></li><li><a class="is-flex" href="#0-00000286s-factorial-1-gt-1"><span class="mr-2">19</span><span>[0.00000286s] factorial(1) -&gt; 1</span></a></li><li><a class="is-flex" href="#0-00004411s-factorial-2-gt-2"><span class="mr-2">20</span><span>[0.00004411s] factorial(2) -&gt; 2</span></a></li><li><a class="is-flex" href="#0-00005984s-factorial-3-gt-6"><span class="mr-2">21</span><span>[0.00005984s] factorial(3) -&gt; 6</span></a></li><li><a class="is-flex" href="#0-00007296s-factorial-4-gt-24"><span class="mr-2">22</span><span>[0.00007296s] factorial(4) -&gt; 24</span></a></li><li><a class="is-flex" href="#0-00014281s-factorial-5-gt-120"><span class="mr-2">23</span><span>[0.00014281s] factorial(5) -&gt; 120</span></a></li><li><a class="is-flex" href="#0-00015783s-factorial-6-gt-720"><span class="mr-2">24</span><span>[0.00015783s] factorial(6) -&gt; 720</span></a></li><li><a class="is-flex" href="#‘6-’-720"><span class="mr-2">25</span><span>(‘6! =’, 720)</span></a><ul class="menu-list"><ul class="menu-list"><li><a class="is-flex" href="#"><span class="mr-2">25.1.1</span><span> 5.2 functools.lru_cache</span></a></li></ul></ul></li><li><a class="is-flex" href="#0-00000095s-fibonacci-0-gt-0"><span class="mr-2">26</span><span>[0.00000095s] fibonacci(0) -&gt; 0</span></a></li><li><a class="is-flex" href="#0-00000215s-fibonacci-1-gt-1"><span class="mr-2">27</span><span>[0.00000215s] fibonacci(1) -&gt; 1</span></a></li><li><a class="is-flex" href="#0-00036097s-fibonacci-2-gt-1"><span class="mr-2">28</span><span>[0.00036097s] fibonacci(2) -&gt; 1</span></a></li><li><a class="is-flex" href="#0-00000167s-fibonacci-3-gt-2"><span class="mr-2">29</span><span>[0.00000167s] fibonacci(3) -&gt; 2</span></a></li><li><a class="is-flex" href="#0-00039101s-fibonacci-4-gt-3"><span class="mr-2">30</span><span>[0.00039101s] fibonacci(4) -&gt; 3</span></a></li><li><a class="is-flex" href="#0-00000095s-fibonacci-5-gt-5"><span class="mr-2">31</span><span>[0.00000095s] fibonacci(5) -&gt; 5</span></a></li><li><a class="is-flex" href="#0-00041699s-fibonacci-6-gt-8"><span class="mr-2">32</span><span>[0.00041699s] fibonacci(6) -&gt; 8</span></a></li><li><a class="is-flex" href="#8"><span class="mr-2">33</span><span>8</span></a></li><li><a class="is-flex" href="#functools-lru-cache-maxsize-128-typed-False"><span class="mr-2">34</span><span>@functools.lru_cache(maxsize=128, typed=False)</span></a></li><li><a class="is-flex" href="#maxsize-how-many-call-results-are-stored-should-be-a-power-of-2"><span class="mr-2">35</span><span>maxsize: how many call results are stored. (should be a power of 2)</span></a></li><li><a class="is-flex" href="#typed-True-gt-store-results-of-different-argument-types-separately-1-1-0"><span class="mr-2">36</span><span>typed: True -&gt; store results of different argument types separately (1 / 1.0)</span></a></li><li><a class="is-flex" href="#False-gt-don’t-store"><span class="mr-2">37</span><span>False -&gt; don’t store</span></a></li><li><a class="is-flex" href="#notes-lru-cache-uses-a-dict-to-store-the-results-all-the-arguments"><span class="mr-2">38</span><span>[notes]: lru_cache uses a dict to store the results, all the arguments</span></a></li><li><a class="is-flex" href="#taken-by-the-decorated-function-must-be-hashable"><span class="mr-2">39</span><span>taken by the decorated function must be hashable.</span></a><ul class="menu-list"><ul class="menu-list"><li><a class="is-flex" href="#"><span class="mr-2">39.1.1</span><span> 5.3 functools.singledispatch</span></a></li></ul></ul></li><li><a class="is-flex" href="#lt-ul-gt"><span class="mr-2">40</span><span>&lt;ul&gt;</span></a></li><li><a class="is-flex" href="#lt-li-gt-lt-p-gt-alpha-lt-p-gt-lt-li-gt"><span class="mr-2">41</span><span>&lt;li&gt;&lt;p&gt;alpha&lt;/p&gt;&lt;/li&gt;</span></a></li><li><a class="is-flex" href="#lt-li-gt-lt-pre-gt-1-2-3-lt-pre-gt-lt-li-gt"><span class="mr-2">42</span><span>&lt;li&gt;&lt;pre&gt;{1, 2, 3}&lt;/pre&gt;&lt;/li&gt;</span></a></li><li><a class="is-flex" href="#lt-ul-gt-1"><span class="mr-2">43</span><span>&lt;/ul&gt;</span></a></li><li><a class="is-flex" href="#1-Register-the-specialized-functions-to-handle-ABCs-abstract-classes"><span class="mr-2">44</span><span>1. Register the specialized functions to handle ABCs (abstract classes)</span></a></li><li><a class="is-flex" href="#instead-of-concrete-implementations-like-int-and-list-support-more"><span class="mr-2">45</span><span>instead of concrete implementations like int and list. (support more)</span></a></li><li><a class="is-flex" href="#2-A-notable-quality-of-the-singledispatch-mechanism-is-that-you-can"><span class="mr-2">46</span><span>2. A notable quality of the singledispatch mechanism is that you can</span></a></li><li><a class="is-flex" href="#register-specialized-functions-anywhere-in-the-system-in-any-module"><span class="mr-2">47</span><span>register specialized functions anywhere in the system, in any module.</span></a><ul class="menu-list"><ul class="menu-list"><li><a class="is-flex" href="#"><span class="mr-2">47.1.1</span><span> 6. Stacked Decorators</span></a></li></ul></ul></li><li><a class="is-flex" href="#f-d1-d2-f"><span class="mr-2">48</span><span>f = d1(d2(f))</span></a><ul class="menu-list"><ul class="menu-list"><li><a class="is-flex" href="#"><span class="mr-2">48.1.1</span><span> 7. Parameterized Decorators</span></a></li></ul></ul></li></ul></div></div><style>.menu-list > li > a.is-active + .menu-list { display: block; }.menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.svg" alt="Hi~" height="28"></a><p class="size-small"><span>&copy; 2021 LB</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="fab fa-creative-commons-nc"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: false,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>
