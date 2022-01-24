@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>MySQL 概述 - Hi~</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="LB477"><meta name="msapplication-TileImage" content="/img/logo.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="LB477"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="文章对数据库做了全面的概述，介绍了常见的数据库管理系统，对比了关系型数据库与非关系型数据库，并对 MySQL 数据库做了系统的概述"><meta property="og:type" content="blog"><meta property="og:title" content="MySQL 概述"><meta property="og:url" content="https://lb477.xyz/DB/MySQL/mysql-overview.html"><meta property="og:site_name" content="Hi~"><meta property="og:description" content="文章对数据库做了全面的概述，介绍了常见的数据库管理系统，对比了关系型数据库与非关系型数据库，并对 MySQL 数据库做了系统的概述"><meta property="og:locale" content="en_US"><meta property="og:image" content="https://raw.githubusercontent.com/liubin477/blog-images/main/mysql-overview/dbms.png"><meta property="og:image" content="https://raw.githubusercontent.com/liubin477/blog-images/main/mysql-overview/mysql-history.png"><meta property="og:image" content="https://raw.githubusercontent.com/liubin477/blog-images/main/mysql-overview/one-to-one.png"><meta property="og:image" content="https://raw.githubusercontent.com/liubin477/blog-images/main/mysql-overview/one-to-many.png"><meta property="og:image" content="https://raw.githubusercontent.com/liubin477/blog-images/main/mysql-overview/many-to-many.png"><meta property="og:image" content="https://raw.githubusercontent.com/liubin477/blog-images/main/mysql-overview/self-to-self.png"><meta property="og:image" content="https://raw.githubusercontent.com/liubin477/blog-images/main/mysql-overview/column-based-db.png"><meta property="article:published_time" content="2021-12-21T02:08:31.000Z"><meta property="article:modified_time" content="2022-01-24T03:48:47.064Z"><meta property="article:author" content="LB"><meta property="article:tag" content="DB"><meta property="article:tag" content="MySQL"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="https://raw.githubusercontent.com/liubin477/blog-images/main/mysql-overview/dbms.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://lb477.xyz/DB/MySQL/mysql-overview.html"},"headline":"MySQL 概述","image":["https://raw.githubusercontent.com/liubin477/blog-images/main/mysql-overview/dbms.png","https://raw.githubusercontent.com/liubin477/blog-images/main/mysql-overview/mysql-history.png","https://raw.githubusercontent.com/liubin477/blog-images/main/mysql-overview/one-to-one.png","https://raw.githubusercontent.com/liubin477/blog-images/main/mysql-overview/one-to-many.png","https://raw.githubusercontent.com/liubin477/blog-images/main/mysql-overview/many-to-many.png","https://raw.githubusercontent.com/liubin477/blog-images/main/mysql-overview/self-to-self.png","https://raw.githubusercontent.com/liubin477/blog-images/main/mysql-overview/column-based-db.png"],"datePublished":"2021-12-21T02:08:31.000Z","dateModified":"2022-01-24T03:48:47.064Z","author":{"@type":"Person","name":"LB"},"publisher":{"@type":"Organization","name":"Hi~","logo":{"@type":"ImageObject","url":"https://lb477.xyz/img/logo.svg"}},"description":"文章对数据库做了全面的概述，介绍了常见的数据库管理系统，对比了关系型数据库与非关系型数据库，并对 MySQL 数据库做了系统的概述"}</script><link rel="canonical" href="https://lb477.xyz/DB/MySQL/mysql-overview.html"><link rel="icon" href="/img/logo.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/rainbow.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;600&amp;family=Roboto+Mono"><link rel="stylesheet" href="/css/cyberpunk.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?764850ecd30549010a0ac127697fcfeb";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><meta name="msvalidate.01" content="47ED542051E0F42DD56830929024860F"><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.4.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.svg" alt="Hi~" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/archives">Archives</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/liubin477"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="Catalogue" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-9-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2021-12-21T02:08:31.000Z" title="2021/12/21 上午10:08:31">2021-12-21</time></span><span class="level-item"><a class="link-muted" href="/categories/DB/">DB</a><span> / </span><a class="link-muted" href="/categories/DB/MySQL/">MySQL</a></span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>&nbsp;visits</span></div></div><h1 class="title is-3 is-size-4-mobile">MySQL 概述</h1><div class="content"><blockquote>
+<p>文章对数据库做了全面的概述，介绍了常见的数据库管理系统，对比了关系型数据库与非关系型数据库，并对 MySQL 数据库做了系统的概述</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="一、数据库概述"><a href="#一、数据库概述" class="headerlink" title="一、数据库概述"></a>一、数据库概述</h2><h3 id="1-为什么使用数据库"><a href="#1-为什么使用数据库" class="headerlink" title="1. 为什么使用数据库"></a>1. 为什么使用数据库</h3><ul>
+<li><strong>持久化</strong>（persistence）：<u>把数据保存到可掉电式存储设备中以供之后使用</u>。如将内存中的数据保存到硬盘</li>
+<li>持久化主要是将内存中的数据存储在<u>关系型数据库</u>中，也可以存储在磁盘文件、XML数据文件中<ul>
+<li>数据库存储优势：<u>存储的数据量大、优化查询、数据结构更复杂</u>等</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-相关概念"><a href="#2-相关概念" class="headerlink" title="2. 相关概念"></a>2. 相关概念</h3><ul>
+<li><strong>DBMS</strong>（Database Management System, 数据库管理系统）：是一种<u>操纵和管理数据库的大型软件</u>，用于建立、使用和维护数据库，对数据库进行统一管理和控制。用户可以通过数据库管理系统访问数据库中表内的数据<ul>
+<li>数据库管理系统可以管理多个数据库，一般开发人员会针对每一个应用创建一个数据库</li>
+</ul>
+</li>
+<li><strong>DB</strong>（Database, 数据库）：即<u>存储数据的“仓库”</u>，其本质是一个文件系统，保存了一系列有组织的数据<ul>
+<li>为保存应用中实体的数据，一般会在数据库中创建多个表，以保存程序中的实体数据</li>
+</ul>
+</li>
+<li><strong>SQL</strong>（Structured Query Language, 结构化查询语言）：专门用来<u>与数据库通信的语言</u></li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/liubin477/blog-images/main/mysql-overview/dbms.png" alt="dbms"></p>
+<h3 id="3-常见的数据库管理系统"><a href="#3-常见的数据库管理系统" class="headerlink" title="3. 常见的数据库管理系统"></a>3. 常见的数据库管理系统</h3><ul>
+<li>目前互联网上常见的数据库管理软件有 Oracle、MySQL、MS SQL Server、DB2、PostgreSQL、Access、Sybase、Informix 等</li>
+<li>可在 <a target="_blank" rel="noopener" href="https://db-engines.com/en/ranking">DB-Engines Ranking</a> 网站查看数据库排名</li>
+</ul>
+<h5 id="Oracle"><a href="#Oracle" class="headerlink" title="Oracle"></a>Oracle</h5><ul>
+<li>1979 年，Oracle 2 诞生，它是第一个商用的 <u>RDBMS</u>（关系型数据库管理系统）。随着 Oracle 软件的名气越来越大，公司也改名叫 Oracle 公司</li>
+<li>2007 年，总计 85 亿美金收购 BEA Systems（JRocket）</li>
+<li>2009 年，总计 74 亿美金收购 SUN。此前的 2008 年，SUN 以 10 亿美金收购 MySQL。意味着 Oracle 同时拥有了 MySQL 的管理权，至此 Oracle 在数据库领域中成为绝对的领导者</li>
+<li>2013 年，甲骨文超越 IBM，成为继 Microsoft 后全球第二大软件公司</li>
+<li>如今 Oracle 的年收入达到了 400 亿美金，足以证明商用数据库软件的价值</li>
+</ul>
+<h5 id="SQL-Server"><a href="#SQL-Server" class="headerlink" title="SQL Server"></a>SQL Server</h5><ul>
+<li>SQL Server 是<u>微软</u>开发的大型商业数据库，诞生于 1989 年</li>
+<li>C#、.net 等语言常使用，与 WinNT 完全集成，也可以很好地与 Microsoft BackOffice 产品集成</li>
+</ul>
+<h5 id="DB2"><a href="#DB2" class="headerlink" title="DB2"></a>DB2</h5><ul>
+<li><u>IBM</u> 公司的数据库产品，收费，常应用在银行系统中</li>
+</ul>
+<h5 id="PostgreSQL"><a href="#PostgreSQL" class="headerlink" title="PostgreSQL"></a>PostgreSQL</h5><ul>
+<li>PostgreSQL 的稳定性极强，最符合 SQL 标准，开源，具备商业级 DBMS 质量</li>
+<li>对数据量大的文本以及 SQL 处理较快</li>
+</ul>
+<h5 id="SyBase"><a href="#SyBase" class="headerlink" title="SyBase"></a>SyBase</h5><ul>
+<li>已经淡出历史舞台。提供了一个非常专业数据建模工具 PowerDesigner</li>
+</ul>
+<h5 id="SQLite"><a href="#SQLite" class="headerlink" title="SQLite"></a>SQLite</h5><ul>
+<li>嵌入式的小型数据库，应用在手机端</li>
+<li>零配置：SQlite3 不用安装、配置、启动、关闭或者配置数据库实例</li>
+<li>当系统崩溃后不用做任何恢复操作，下次使用数据库的时候自动恢复</li>
+</ul>
+<h5 id="informix"><a href="#informix" class="headerlink" title="informix"></a>informix</h5><ul>
+<li><u>IBM</u> 公司出品，取自 Information 和 Unix 的结合，它是第一个被移植到 Linux 上的商业数据库产品</li>
+<li>仅运行于 unix/linux 平台，命令行操作。性能较高，支持集群，适应于安全性要求极高的系统，尤其是银行，证券系统的应用</li>
+</ul>
+<h2 id="二、MySQL-概述"><a href="#二、MySQL-概述" class="headerlink" title="二、MySQL 概述"></a>二、MySQL 概述</h2><h3 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1. 介绍"></a>1. 介绍</h3><ul>
+<li>MySQL 是一个<u>开源关系型数据库管理系统</u>，由瑞典 MySQL AB（创始人 Michael Widenius）公司 1995 年开发，迅速成为开源数据库的 No.1</li>
+<li>2008 年被 Sun 收购（10 亿美金），2009 年 Sun 被 Oracle 收购。<code>MariaDB</code> 应运而生（MySQL 的创造者担心 MySQL 有闭源的风险，因此创建了 MySQL 的分支项目 MariaDB）</li>
+<li>MySQL 6.x 版本之后分为社区版和商业版</li>
+<li>MySQL 是一种关联数据库管理系统，将数据保存在不同的表中，而不是将所有数据放在一个大仓库内，这样就增加了速度并提高了灵活性</li>
+<li>MySQL 是可以定制的，采用了 GPL（GNU General Public License）协议，可以修改源码来开发自己的 MySQL 系统</li>
+<li>MySQL 可以处理拥有上千万条记录的大型数据库。32 位系统表文件最大可支持 <code>4GB</code>，64 位系统支持最大的表文件为 <code>8TB</code></li>
+<li>MySQL 可以允许运行于多个系统上，并且支持多种语言。包括 C、C++、Python、Java、Perl、PHP 和 Ruby 等</li>
+</ul>
+<h3 id="2-发展史"><a href="#2-发展史" class="headerlink" title="2. 发展史"></a>2. 发展史</h3><ul>
+<li>MySQL 的历史就是整个互联网的发展史。互联网业务从社交领域、电商领域到金融领域的发展，推动着应用对数据库需求的提升，对传统的数据库服务能力提出了挑战。高并发、高性能、高可用、轻资源、易维护、易扩展的需求，促进了 MySQL 的长足发展</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/liubin477/blog-images/main/mysql-overview/mysql-history.png" alt="mysql-history"></p>
+<h3 id="3-优点"><a href="#3-优点" class="headerlink" title="3. 优点"></a>3. 优点</h3><ul>
+<li><u>开放源代码，使用成本低</u></li>
+<li><u>性能卓越，服务稳定</u></li>
+<li><u>软件体积小，使用简单，并且易于维护</u></li>
+<li><u>历史悠久，社区用户非常活跃，遇到问题可以寻求帮助</u></li>
+<li><u>许多互联网公司在用，经过了时间的验证</u></li>
+</ul>
+<h3 id="4-与-Oracle-对比"><a href="#4-与-Oracle-对比" class="headerlink" title="4. 与 Oracle 对比"></a>4. 与 Oracle 对比</h3><ul>
+<li>Oracle 更适合大型跨国企业的使用，因为他们对费用不敏感，但是对性能要求以及安全性有更高的要求</li>
+<li>MySQL 由于其体积小、速度快、总体拥有成本低，可处理上千万条记录的大型数据库，尤其是开放源码这一特点，使得很多互联网公司、中小型网站选择了 MySQL 作为网站数据库（Facebook、Twitter、YouTube、阿里巴巴/蚂蚁金服、去哪儿、美团、腾讯等）</li>
+</ul>
+<h3 id="5-关于-MySQL-8-0"><a href="#5-关于-MySQL-8-0" class="headerlink" title="5. 关于 MySQL 8.0"></a>5. 关于 MySQL 8.0</h3><ul>
+<li>MySQL 从 5.7 版本直接跳跃发布了 8.0 版本，可见这是一个令人兴奋的里程碑版本</li>
+<li>MySQL 8 版本在功能上做了显著的改进与增强，开发者对 MySQL 的源代码进行了重构，最突出的一点是<u>对 MySQL Optimizer 优化器进行了改进</u>。不仅在速度上得到了改善，还为用户带来了更好的性能和更棒的体验</li>
+</ul>
+<h2 id="三、关系型数据库"><a href="#三、关系型数据库" class="headerlink" title="三、关系型数据库"></a>三、关系型数据库</h2><h3 id="1-介绍-1"><a href="#1-介绍-1" class="headerlink" title="1. 介绍"></a>1. 介绍</h3><ul>
+<li>关系型数据库是最古老的数据库类型，关系型数据库模型把复杂的数据结构归结为简单的<code>二元关系</code>（即二维表格形式）</li>
+<li>关系型数据库以<code>行</code>（row）和<code>列</code>（column）的形式存储数据，以便于用户理解。这一系列的行和列被称为<code>表</code>（table），一组表组成了一个<code>库</code>（database）</li>
+<li><u>关系型数据库就是建立在关系模型基础上的数据库</u>：表与表之间的数据记录有<code>关系</code>（relationship），现实世界中的各种实体以及实体之间的各种联系均用<code>关系模型</code>来表示</li>
+<li><code>SQL</code> 就是关系型数据库的查询语言</li>
+</ul>
+<h3 id="2-优点"><a href="#2-优点" class="headerlink" title="2. 优点"></a>2. 优点</h3><ul>
+<li><strong>复杂查询</strong>：可以用 SQL 语句方便的在一个表以及多个表之间做非常复杂的数据查询</li>
+<li><strong>支持事务</strong>：使得对于安全性能很高的数据访问要求得以实现</li>
+</ul>
+<h3 id="3-关系模型"><a href="#3-关系模型" class="headerlink" title="3. 关系模型"></a>3. 关系模型</h3><ul>
+<li>E-R（entity-relationship, 实体-联系）模型中有三个主要概念是：实体集、属性、联系集</li>
+<li>一个<code>实体集</code>（class）对应于数据库中的一个<code>表</code>（table），一个<code>实体</code>（instance）则对应于数据库表中的一<code>行</code>（row），也称为一条<code>记录</code>（record）。一个<code>属性</code>（attribute）对应于数据库表中的一<code>列</code>（column），也称为一个<code>字段</code>（field）</li>
+</ul>
+<h4 id="1-一对一关联"><a href="#1-一对一关联" class="headerlink" title="(1) 一对一关联"></a>(1) 一对一关联</h4><ul>
+<li>在实际的开发中应用不多，因为一对一可以创建成一张表</li>
+<li>举例：将学生表（学号、姓名、手机号码、班级、系别、身份证号码、家庭住址、籍贯、紧急联系人、…）拆分为两张表<ul>
+<li>基础信息表（学号、姓名、手机号码、班级、系别）</li>
+<li>档案信息表（学号、身份证号码、家庭住址、籍贯、紧急联系人、…）</li>
+</ul>
+</li>
+<li>两种建表原则：<ul>
+<li>外键唯一：主表的主键和从表的外键（需唯一），形成主外键关系</li>
+<li>外键是主键：主表的主键和从表的主键，形成主外键关系</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/liubin477/blog-images/main/mysql-overview/one-to-one.png" alt="one-to-one"></p>
+<h4 id="2-一对多关联"><a href="#2-一对多关联" class="headerlink" title="(2) 一对多关联"></a>(2) 一对多关联</h4><ul>
+<li>举例：<ul>
+<li>员工表（编号、姓名、…、所属部门）</li>
+<li>部门表（编号、名称、简介）</li>
+</ul>
+</li>
+<li>建表原则：在从表（n）创建一个字段，字段作为外键指向主表（1）的主键</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/liubin477/blog-images/main/mysql-overview/one-to-many.png" alt="one-to-many"></p>
+<h4 id="3-多对多关联"><a href="#3-多对多关联" class="headerlink" title="(3) 多对多关联"></a>(3) 多对多关联</h4><ul>
+<li><p>要表示多对多关系，必须创建第三个表，该表通常称为<code>联接表</code>，它将多对多关系划分为两个一对多关系。将这两个表的主键都插入到第三个表中</p>
+</li>
+<li><p>举例：“订单”表和“产品”表有多对多的关系，这种关系是通过与“订单明细”表建立两个一对多关系来定义的。一个订单可以有多个产品，每个产品可以出现在多个订单中</p>
+<ul>
+<li>产品表：“产品”表中的每条记录表示一个产品</li>
+<li>订单表：“订单”表中的每条记录表示一个订单</li>
+<li>订单明细表：每个产品可以与“订单”表中的多条记录对应，即出现在多个订单中。一个订单可以与“产品”表中的多条记录对应，即包含多个产品</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/liubin477/blog-images/main/mysql-overview/many-to-many.png" alt="many-to-many"></p>
+<h4 id="4-自关联"><a href="#4-自关联" class="headerlink" title="(4) 自关联"></a>(4) 自关联</h4><p><img src="https://raw.githubusercontent.com/liubin477/blog-images/main/mysql-overview/self-to-self.png" alt="self-to-self"></p>
+<h2 id="四、非关系型数据库"><a href="#四、非关系型数据库" class="headerlink" title="四、非关系型数据库"></a>四、非关系型数据库</h2><h3 id="1-介绍-2"><a href="#1-介绍-2" class="headerlink" title="1. 介绍"></a>1. 介绍</h3><ul>
+<li>非关系型数据库可看成传统关系型数据库的功能阉割版本：<u>基于键值对存储数据，不需要经过 SQL 层的解析，性能非常高。同时，通过减少不常用的功能，进一步提高性能</u></li>
+<li>目前基本上大部分主流的非关系型数据库都是免费的</li>
+<li>相比于 SQL，NoSQL 泛指非关系型数据库，包括了榜单上的键值型数据库、文档型数据库、搜索引擎和列存储等，除此以外还包括图形数据库。也只有用 NoSQL 一词才能将这些技术囊括进来</li>
+</ul>
+<h3 id="2-NoSQL-的演变"><a href="#2-NoSQL-的演变" class="headerlink" title="2. NoSQL 的演变"></a>2. NoSQL 的演变</h3><ul>
+<li>由于 SQL 一直称霸 DBMS，因此许多人在思考是否有一种数据库技术能远离 SQL，于是 NoSQL 诞生了，但是随着发展却发现越来越离不开 SQL。到目前为止 NoSQL 阵营中的 DBMS 都会有实现类似 SQL 的功能</li>
+<li>下面是“NoSQL”这个名词在不同时期的诠释，从这些释义的变化中可以看出 NoSQL 功能的演变：<ul>
+<li>1970：NoSQL = We have no SQL</li>
+<li>1980：NoSQL = Know SQL</li>
+<li>2000：NoSQL = No SQL</li>
+<li>2005：NoSQL = Not only SQL</li>
+<li>2013：NoSQL = No, SQL</li>
+</ul>
+</li>
+<li>NoSQL 对 SQL 做出了很好的补充，比如实际开发中，有很多业务需求，其实并不需要完整的关系型数据库功能，非关系型数据库的功能就足够使用了。这种情况下，使用性能更高、成本更低的非关系型数据库当然是更明智的选择。比如：日志收集、排行榜、定时器等</li>
+</ul>
+<h3 id="3-常见的非关系型数据库"><a href="#3-常见的非关系型数据库" class="headerlink" title="3. 常见的非关系型数据库"></a>3. 常见的非关系型数据库</h3><h5 id="键值型数据库"><a href="#键值型数据库" class="headerlink" title="键值型数据库"></a>键值型数据库</h5><ul>
+<li>键值型数据库通过 Key-Value 键值的方式来存储数据，其中 Key 和 Value 可以是简单的对象，也可以是复杂的对象</li>
+<li>Key 作为<u>唯一的标识符</u>，优点是查找速度快，在这方面明显优于关系型数据库，缺点是无法像关系型数据库一样使用条件过滤（比如 WHERE），如果你不知道去哪里找数据，就要遍历所有的键，这就会消耗大量的计算</li>
+<li>键值型数据库典型的使用场景是作为<u>内存缓存</u>。Redis 是最流行的键值型数据库</li>
+</ul>
+<h5 id="文档型数据库"><a href="#文档型数据库" class="headerlink" title="文档型数据库"></a>文档型数据库</h5><ul>
+<li>此类数据库可存放并获取文档，文档可以是 XML、JSON 等格式。在数据库中文档作为处理信息的基本单位，一个文档就相当于一条记录。文档数据库所存放的文档，就相当于键值数据库所存放的“值”</li>
+<li>MongoDB 是最流行的文档型数据库。此外，还有 CouchDB 等</li>
+</ul>
+<h5 id="搜索引擎数据库"><a href="#搜索引擎数据库" class="headerlink" title="搜索引擎数据库"></a>搜索引擎数据库</h5><ul>
+<li>虽然关系型数据库采用了索引提升检索效率，但是针对全文索引效率却较低。搜索引擎数据库是应用在搜索引擎领域的数据存储形式，由于搜索引擎会爬取大量的数据，并以特定的格式进行存储，这样在检索的时候才能保证性能最优。其核心原理是“倒排索引”</li>
+<li>典型产品：Solr、ElasticSearch、Splunk 等</li>
+</ul>
+<h5 id="列式数据库"><a href="#列式数据库" class="headerlink" title="列式数据库"></a>列式数据库</h5><ul>
+<li>列式数据库是相对于行式存储的数据库，Oracle、MySQL、SQL Server 等数据库都是采用的行式存储（Row-based），而列式数据库是将数据按照列存储到数据库中，这样做的好处是可以大量降低系统的 I/O，适合于分布式文件系统，不足在于功能相对有限。典型产品：HBase</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/liubin477/blog-images/main/mysql-overview/column-based-db.png" alt="column-based-db"></p>
+<h5 id="图形数据库"><a href="#图形数据库" class="headerlink" title="图形数据库"></a>图形数据库</h5><ul>
+<li>关系型数据用于存储明确关系的数据，但对于复杂关系的数据存储却有些力不从心。如社交网络中人物之间的关系，如果用关系型数据库则非常复杂，用图形数据库将非常简单</li>
+<li>图形数据库，利用了图这种数据结构存储了实体（对象）之间的关系。图形数据库最典型的例子就是社交网络中人与人的关系，数据模型主要是以节点和边（关系）来实现，特点在于能高效地解决复杂的关系问题。典型产品：Neo4J、InfoGrid 等</li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>MySQL 概述</p><p><a href="https://lb477.xyz/DB/MySQL/mysql-overview.html">https://lb477.xyz/DB/MySQL/mysql-overview.html</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>LB</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2021-12-21</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2022-01-24</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/DB/">DB</a><a class="link-muted mr-2" rel="tag" href="/tags/MySQL/">MySQL</a></div><div class="a2a_kit a2a_kit_size_32 a2a_default_style"><a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a><a class="a2a_button_facebook"></a><a class="a2a_button_twitter"></a><a class="a2a_button_telegram"></a><a class="a2a_button_whatsapp"></a><a class="a2a_button_reddit"></a></div><script src="https://static.addtoany.com/menu/page.js" defer></script></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">Like this article? Support the author with</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>Alipay</span><span class="qrcode"><img src="/img/alipay.png" alt="Alipay"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>Wechat</span><span class="qrcode"><img src="/img/wechat.png" alt="Wechat"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/Linux/centos7-nfs-server.html"><span class="level-item">CentOS 7 部署 NFS Server</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">Comments</h3><div class="content" id="valine-thread"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script><script>new Valine({
+            el: '#valine-thread',
+            appId: "GU0mw61vtgkNAOuvr9Ki9jMY-gzGzoHsz",
+            appKey: "5A97TX5HLLD2F1P8OKuq6qDt",
+            placeholder: "（づ￣3￣）づ╭❤～",
+            avatar: "wavatar",
+            avatarForce: false,
+            meta: ["nick","mail","link"],
+            pageSize: 10,
+            lang: "zh-CN",
+            visitor: false,
+            highlight: true,
+            recordIP: true,
+            
+            
+            
+            enableQQ: false,
+            requiredFields: [],
+        });</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">Catalogue</h3><ul class="menu-list"><li><a class="level is-mobile" href="#一、数据库概述"><span class="level-left"><span class="level-item">一、数据库概述</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-为什么使用数据库"><span class="level-left"><span class="level-item">1. 为什么使用数据库</span></span></a></li><li><a class="level is-mobile" href="#2-相关概念"><span class="level-left"><span class="level-item">2. 相关概念</span></span></a></li><li><a class="level is-mobile" href="#3-常见的数据库管理系统"><span class="level-left"><span class="level-item">3. 常见的数据库管理系统</span></span></a></li></ul></li><li><a class="level is-mobile" href="#二、MySQL-概述"><span class="level-left"><span class="level-item">二、MySQL 概述</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-介绍"><span class="level-left"><span class="level-item">1. 介绍</span></span></a></li><li><a class="level is-mobile" href="#2-发展史"><span class="level-left"><span class="level-item">2. 发展史</span></span></a></li><li><a class="level is-mobile" href="#3-优点"><span class="level-left"><span class="level-item">3. 优点</span></span></a></li><li><a class="level is-mobile" href="#4-与-Oracle-对比"><span class="level-left"><span class="level-item">4. 与 Oracle 对比</span></span></a></li><li><a class="level is-mobile" href="#5-关于-MySQL-8-0"><span class="level-left"><span class="level-item">5. 关于 MySQL 8.0</span></span></a></li></ul></li><li><a class="level is-mobile" href="#三、关系型数据库"><span class="level-left"><span class="level-item">三、关系型数据库</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-介绍-1"><span class="level-left"><span class="level-item">1. 介绍</span></span></a></li><li><a class="level is-mobile" href="#2-优点"><span class="level-left"><span class="level-item">2. 优点</span></span></a></li><li><a class="level is-mobile" href="#3-关系模型"><span class="level-left"><span class="level-item">3. 关系模型</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-一对一关联"><span class="level-left"><span class="level-item">(1) 一对一关联</span></span></a></li><li><a class="level is-mobile" href="#2-一对多关联"><span class="level-left"><span class="level-item">(2) 一对多关联</span></span></a></li><li><a class="level is-mobile" href="#3-多对多关联"><span class="level-left"><span class="level-item">(3) 多对多关联</span></span></a></li><li><a class="level is-mobile" href="#4-自关联"><span class="level-left"><span class="level-item">(4) 自关联</span></span></a></li></ul></li></ul></li><li><a class="level is-mobile" href="#四、非关系型数据库"><span class="level-left"><span class="level-item">四、非关系型数据库</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-介绍-2"><span class="level-left"><span class="level-item">1. 介绍</span></span></a></li><li><a class="level is-mobile" href="#2-NoSQL-的演变"><span class="level-left"><span class="level-item">2. NoSQL 的演变</span></span></a></li><li><a class="level is-mobile" href="#3-常见的非关系型数据库"><span class="level-left"><span class="level-item">3. 常见的非关系型数据库</span></span></a></li></ul></li></ul></div></div><script src="/js/toc.js" defer></script></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.svg" alt="Hi~" height="28"></a><p class="is-size-7"><span>&copy; 2022 LB</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><br><span id="busuanzi_container_site_uv">Visited by <span id="busuanzi_value_site_uv">0</span> users</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="fab fa-creative-commons-nc"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://s9.cnzz.com/z_stat.php?id=1280600932&amp;web_id=1280600932" async></script><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>
