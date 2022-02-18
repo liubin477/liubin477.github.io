@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Java 开发环境搭建以及 IDEA 2020.1 详细配置 - Hi~</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="LB477"><meta name="msapplication-TileImage" content="/img/logo.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="LB477"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="本文致力于搭建一个完备的 Java 开发环境，介绍了 Java 集成开发环境 IntelliJ IDEA 2020.1 的个性化配置，列出了常用的快捷键，同时也对 JDK、Maven、Git 做了简单的配置"><meta property="og:type" content="blog"><meta property="og:title" content="Java 开发环境搭建以及 IDEA 2020.1 详细配置"><meta property="og:url" content="https://lb477.xyz/Java/idea-config.html"><meta property="og:site_name" content="Hi~"><meta property="og:description" content="本文致力于搭建一个完备的 Java 开发环境，介绍了 Java 集成开发环境 IntelliJ IDEA 2020.1 的个性化配置，列出了常用的快捷键，同时也对 JDK、Maven、Git 做了简单的配置"><meta property="og:locale" content="en_US"><meta property="og:image" content="https://lb477.xyz/img/og_image.png"><meta property="article:published_time" content="2022-02-18T09:47:41.000Z"><meta property="article:modified_time" content="2022-02-18T09:57:46.323Z"><meta property="article:author" content="LB"><meta property="article:tag" content="Software"><meta property="article:tag" content="Java"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://lb477.xyz/Java/idea-config.html"},"headline":"Java 开发环境搭建以及 IDEA 2020.1 详细配置","image":["https://lb477.xyz/img/og_image.png"],"datePublished":"2022-02-18T09:47:41.000Z","dateModified":"2022-02-18T09:57:46.323Z","author":{"@type":"Person","name":"LB"},"publisher":{"@type":"Organization","name":"Hi~","logo":{"@type":"ImageObject","url":"https://lb477.xyz/img/logo.svg"}},"description":"本文致力于搭建一个完备的 Java 开发环境，介绍了 Java 集成开发环境 IntelliJ IDEA 2020.1 的个性化配置，列出了常用的快捷键，同时也对 JDK、Maven、Git 做了简单的配置"}</script><link rel="canonical" href="https://lb477.xyz/Java/idea-config.html"><link rel="icon" href="/img/logo.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/rainbow.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;600&amp;family=Roboto+Mono"><link rel="stylesheet" href="/css/cyberpunk.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?764850ecd30549010a0ac127697fcfeb";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><meta name="msvalidate.01" content="47ED542051E0F42DD56830929024860F"><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.4.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.svg" alt="Hi~" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/archives">Archives</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/liubin477"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="Catalogue" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-9-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2022-02-18T09:47:41.000Z" title="2022/2/18 下午5:47:41">2022-02-18</time></span><span class="level-item"><a class="link-muted" href="/categories/Java/">Java</a></span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>&nbsp;visits</span></div></div><h1 class="title is-3 is-size-4-mobile">Java 开发环境搭建以及 IDEA 2020.1 详细配置</h1><div class="content"><blockquote>
+<p>本文致力于搭建一个完备的 Java 开发环境，介绍了 Java 集成开发环境 IntelliJ IDEA 2020.1 的个性化配置，列出了常用的快捷键，同时也对 JDK、Maven、Git 做了简单的配置</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="一、IDEA-概述"><a href="#一、IDEA-概述" class="headerlink" title="一、IDEA 概述"></a>一、IDEA 概述</h2><h3 id="1-JetBrains-公司介绍"><a href="#1-JetBrains-公司介绍" class="headerlink" title="1. JetBrains 公司介绍"></a>1. JetBrains 公司介绍</h3><ul>
+<li>IDEA 是 <a target="_blank" rel="noopener" href="https://www.jetbrains.com/">JetBrains</a> 公司的产品，公司旗下还有其它产品，比如：<ul>
+<li>WebStorm：用于开发 JavaScript、HTML5、CSS3 等前端技术</li>
+<li>PyCharm：用于开发 python</li>
+<li>PhpStorm：用于开发 PHP</li>
+<li>RubyMine：用于开发 Ruby/Rails</li>
+<li>AppCode：用于开发 Objective - C/Swift</li>
+<li>CLion：用于开发 C/C++</li>
+<li>DataGrip：用于开发数据库和 SQL</li>
+<li>Rider： 用于开发 .NET</li>
+<li>GoLand： 用于开发 Go</li>
+<li>Android Studio：用于开发 android（google 基于 IDEA 社区版进行迭代）</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-IntelliJ-IDEA-介绍"><a href="#2-IntelliJ-IDEA-介绍" class="headerlink" title="2. IntelliJ IDEA 介绍"></a>2. IntelliJ IDEA 介绍</h3><ul>
+<li>IDEA，全称 IntelliJ IDEA，是 Java 语言的集成开发环境。IDEA 在业界被公认为是最好的 Java 开发工具之一，尤其在智能代码助手、代码自动提示、重构、J2EE 支持、Ant、JUnit、CVS 整合、代码审查、创新的 GUI 设计等方面的功能可以说是超常的</li>
+<li>IntelliJ IDEA 主要用于支持 Java、Scala、Groovy 等语言的开发工具，同时具备支持目前主流的技术和框架，擅长于企业应用、移动应用和 Web 应用的开发</li>
+<li>优势：<ul>
+<li>强大的整合能力。比如：Git、Maven、Spring 等</li>
+<li>提示功能的快速、便捷</li>
+<li>提示功能的范围广</li>
+<li>好用的快捷键和代码模板</li>
+<li>精准搜索</li>
+</ul>
+</li>
+<li>下载地址：<a target="_blank" rel="noopener" href="https://www.jetbrains.com/idea/download/#section=windows">https://www.jetbrains.com/idea/download/#section=windows</a></li>
+<li>官方使用文档：<a target="_blank" rel="noopener" href="https://www.jetbrains.com/help/idea/getting-started.html">https://www.jetbrains.com/help/idea/getting-started.html</a></li>
+<li>旗舰版（Ultimate）和社区版（Community）的区别：<a target="_blank" rel="noopener" href="https://www.jetbrains.com/products/compare/?product=idea&amp;product=idea-ce">https://www.jetbrains.com/products/compare/?product=idea&amp;product=idea-ce</a></li>
+</ul>
+<h3 id="3-下载安装"><a href="#3-下载安装" class="headerlink" title="3. 下载安装"></a>3. 下载安装</h3><ul>
+<li>版本：2020.1.1</li>
+<li>准备：内存 8G、CPU i5、SSD、JDK</li>
+<li>安装激活：略</li>
+</ul>
+<h3 id="4-调整-VM-配置"><a href="#4-调整-VM-配置" class="headerlink" title="4. 调整 VM 配置"></a>4. 调整 VM 配置</h3><ul>
+<li>配置文件路径：<code>IntelliJ IDEA 2020.1.1/bin/idea64.exe.vmoptions</code></li>
+<li>32 位操作系统内存不会超过 4G：不建议调整</li>
+<li>64 位操作系统中 8G 内存以下的机子：不建议调整</li>
+<li>64 位操作系统中 8G 内存以上的机子：建议调整如下</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-Xms128m  <span class="comment">// 设置初始内存数，可提高Java程序的启动速度。16G内存的机器可设置为`-Xms512m`</span></span><br><span class="line">-Xmx750m  <span class="comment">// 设置最大内存数，可减少内存收集的频率，提高程序性能。16G内存的机器可设置为`-Xmx1500m`</span></span><br><span class="line">-XX:ReservedCodeCacheSize=240m  <span class="comment">// 保留代码占用的内存容量。16G内存的机器可设置为`-XX:ReservedCodeCacheSize=500m`</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="二、IDEA-设置"><a href="#二、IDEA-设置" class="headerlink" title="二、IDEA 设置"></a>二、IDEA 设置</h2><ul>
+<li>以下操作均在启动界面的 <code>Configure -&gt; Settings</code> 选项中进行</li>
+</ul>
+<h3 id="1-滚轮修改字体大小"><a href="#1-滚轮修改字体大小" class="headerlink" title="1. 滚轮修改字体大小"></a>1. 滚轮修改字体大小</h3><ul>
+<li><code>General</code> -&gt; <code>Change font size with Ctrl+Mouse Wheel(on)</code></li>
+</ul>
+<h3 id="2-自动导包"><a href="#2-自动导包" class="headerlink" title="2. 自动导包"></a>2. 自动导包</h3><ul>
+<li><code>Auto Import</code> -&gt; <code>Insert imports on paste(Ask) / Add unambiguous imports on the fly(on) / Optimize imports on the fly(on)</code></li>
+</ul>
+<h3 id="3-显示方法之间的分割线"><a href="#3-显示方法之间的分割线" class="headerlink" title="3. 显示方法之间的分割线"></a>3. 显示方法之间的分割线</h3><ul>
+<li><code>Editor/Appearance</code> -&gt; <code>Show method separators</code></li>
+</ul>
+<h3 id="4-忽略大小写提示"><a href="#4-忽略大小写提示" class="headerlink" title="4. 忽略大小写提示"></a>4. 忽略大小写提示</h3><ul>
+<li>默认首字母大写才提示</li>
+<li><code>Code Completion</code> -&gt; <code>Match case(off)</code></li>
+</ul>
+<h3 id="5-Tab-页多行显示"><a href="#5-Tab-页多行显示" class="headerlink" title="5. Tab 页多行显示"></a>5. Tab 页多行显示</h3><ul>
+<li>打开文件很多时，多行显示而非隐藏</li>
+<li><code>Editor Tabs</code> -&gt; <code>Show tabs in one row(off)</code></li>
+</ul>
+<h3 id="6-代码字体"><a href="#6-代码字体" class="headerlink" title="6. 代码字体"></a>6. 代码字体</h3><ul>
+<li><code>Font</code> -&gt; <code>Font(Courier New) / Size(16) / Line spacing(1.1) / Fallback font(Consolas)</code></li>
+</ul>
+<h3 id="7-类头注释"><a href="#7-类头注释" class="headerlink" title="7. 类头注释"></a>7. 类头注释</h3><ul>
+<li><code>File and Code Templates/Includes/File Header</code></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> liubin</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> $&#123;YEAR&#125;-$&#123;MONTH&#125;-$&#123;DAY&#125; $&#123;TIME&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ul>
+<li>${PACKAGE_NAME}：name of the package in which the new file is created</li>
+<li>${USER}：current user system login name</li>
+<li>${DATE}：current system date</li>
+<li>${TIME}：current system time</li>
+<li>${YEAR}：current year</li>
+<li>${MONTH}：current month</li>
+<li>${MONTH_NAME_SHORT}：first 3 letters of the current month name. Example: Jan, Feb, etc.</li>
+<li>${MONTH_NAME_FULL}：full name of the current month. Example: January, February, etc.</li>
+<li>${DAY}：current day of the month</li>
+<li>${DAY_NAME_SHORT}：first 3 letters of the current day name. Example: Mon, Tue, etc.</li>
+<li>${DAY_NAME_FULL}：full name of the current day. Example: Monday, Tuesday, etc.</li>
+<li>${HOUR}：current hour</li>
+<li>${MINUTE}：current minute</li>
+<li>${PROJECT_NAME}：the name of the current project</li>
+</ul>
+</blockquote>
+<h3 id="8-文件编码"><a href="#8-文件编码" class="headerlink" title="8. 文件编码"></a>8. 文件编码</h3><ul>
+<li><code>File Encodings</code> -&gt; <code>Global Encoding(UTF-8) / Project Encoding(UTF-8) / Default encoding for properties files(UTF-8) / Transparent native-to-ascii conversion(on)</code></li>
+</ul>
+<h3 id="9-关闭打开项目为最后关闭项目"><a href="#9-关闭打开项目为最后关闭项目" class="headerlink" title="9. 关闭打开项目为最后关闭项目"></a>9. 关闭打开项目为最后关闭项目</h3><ul>
+<li><code>System Settings</code> -&gt; <code>Reopen last project on startup(off)</code></li>
+</ul>
+<h3 id="10-去除-IDEA-自带的-iml-idea-文件"><a href="#10-去除-IDEA-自带的-iml-idea-文件" class="headerlink" title="10. 去除 IDEA 自带的 .iml/.idea 文件"></a>10. 去除 IDEA 自带的 .iml/.idea 文件</h3><ul>
+<li><code>File Types</code> -&gt; <code>Ignore files and folders(*.iml;*.idea;)</code></li>
+</ul>
+<h3 id="11-注释格式"><a href="#11-注释格式" class="headerlink" title="11. 注释格式"></a>11. 注释格式</h3><ul>
+<li>Java 注释优化：<code>Code Style/Java</code> -&gt; <code>Code Generation/Line comment at first column(off)</code></li>
+<li>Html 注释优化：<code>Code Style/HTML</code> -&gt; <code>Code Generation/Line comment at first column(off) / Block comment at first column(off)</code></li>
+</ul>
+<h3 id="12-Debuger"><a href="#12-Debuger" class="headerlink" title="12. Debuger"></a>12. Debuger</h3><ul>
+<li><code>Debugger</code> -&gt; <code>Transport(Shared memory)</code></li>
+</ul>
+<h3 id="13-关闭自动更新"><a href="#13-关闭自动更新" class="headerlink" title="13. 关闭自动更新"></a>13. 关闭自动更新</h3><ul>
+<li><code>Updates</code> -&gt; <code>Automatically check updates(off)</code></li>
+</ul>
+<h2 id="三、其他软件及配置"><a href="#三、其他软件及配置" class="headerlink" title="三、其他软件及配置"></a>三、其他软件及配置</h2><h3 id="1-JDK"><a href="#1-JDK" class="headerlink" title="1. JDK"></a>1. JDK</h3><ul>
+<li>安装版本：8u212</li>
+<li>环境变量：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">JAVA_HOME</th>
+<th align="center">CLASSPATH</th>
+<th align="center">Path</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">D:\Develop\Java\jdk-8u212</td>
+<td align="center">.;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar;</td>
+<td align="center">%JAVA_HOME%\bin</td>
+</tr>
+</tbody></table>
+<ul>
+<li>IDEA 配置：<code>Configure</code> -&gt; <code>Structure for New Projects</code> -&gt; <code>Project SDK</code></li>
+</ul>
+<h3 id="2-Maven"><a href="#2-Maven" class="headerlink" title="2. Maven"></a>2. Maven</h3><ul>
+<li>Maven 是 Apache 提供的一款自动化构建工具，用于自动化构建和依赖管理。开发团队基本不用花多少时间就能自动完成工程的基础构建配置，因为 Maven 使用了一个标准的目录结构和一个默认的构建生命周期<ul>
+<li>清理：表示在编译代码前将之前生成的内容删除</li>
+<li>编译：将源代码编译为字节码</li>
+<li>测试：运行单元测试用例程序</li>
+<li>报告：测试程序的结果</li>
+<li>打包：将 Java 项目打成 jar 包；将 Web 项目打成 war 包</li>
+<li>安装：将 jar 或 war 生成到 Maven 仓库中</li>
+<li>部署：将 jar 或 war 从 Maven 仓库中部署到 Web 服务器上运行</li>
+</ul>
+</li>
+<li>需联网：Maven 的核心程序并不包含具体功能，仅负责宏观调度。具体功能由插件来完成。Maven 核心程序会到本地仓库中查找插件，如果本地仓库中没有就会从远程中央仓库下载，此时如果不能上网则无法执行 Maven 的具体功能</li>
+<li>安装版本：3.6.3</li>
+<li>环境变量配置：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">MAVEN_HOME</th>
+<th align="center">Path</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">D:\Develop\apache-maven-3.6.3</td>
+<td align="center">%MAVEN_HOME%\bin</td>
+</tr>
+</tbody></table>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mvn -v</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>settings.xml：</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">settings</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://maven.apache.org/SETTINGS/1.0.0&quot;</span></span></span><br><span class="line"><span class="tag">          <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">          <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">localRepository</span>&gt;</span>D:\Develop\apache-maven-3.6.3\repository<span class="tag">&lt;/<span class="name">localRepository</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">pluginGroups</span>&gt;</span><span class="tag">&lt;/<span class="name">pluginGroups</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">proxies</span>&gt;</span><span class="tag">&lt;/<span class="name">proxies</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">servers</span>&gt;</span><span class="tag">&lt;/<span class="name">servers</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">mirrors</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">mirror</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">id</span>&gt;</span>aliyunmaven<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>*<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">name</span>&gt;</span>阿里云公共仓库<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">url</span>&gt;</span>https://maven.aliyun.com/repository/public<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">mirror</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">mirrors</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">profiles</span>&gt;</span><span class="tag">&lt;/<span class="name">profiles</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">settings</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>IDEA 配置：<code>Maven</code> -&gt; <code>Maven home directory / User settings file / Local repository</code></li>
+</ul>
+<h3 id="3-Git"><a href="#3-Git" class="headerlink" title="3. Git"></a>3. Git</h3><ul>
+<li><p>下载地址：<a target="_blank" rel="noopener" href="https://git-scm.com/download/win">https://git-scm.com/download/win</a></p>
+</li>
+<li><p>IDEA 配置：<code>Git</code> -&gt; <code>Path to Git executable</code> -&gt; <code>git.exe</code></p>
+</li>
+<li><p>从 Github 上拉取项目：</p>
+<ul>
+<li><p>方式一：<code>VCS</code> -&gt; <code>Get From Version Control</code></p>
+</li>
+<li><p>方式二：<code>File</code> -&gt; <code>New/Project from Version Control</code></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="四、插件"><a href="#四、插件" class="headerlink" title="四、插件"></a>四、插件</h2><ul>
+<li>插件下载地址：<a target="_blank" rel="noopener" href="https://plugins.jetbrains.com/plugin">https://plugins.jetbrains.com/plugin</a></li>
+<li>必装：<ul>
+<li>彩虹括号：<code>Rainbow Brackets</code></li>
+<li>代码小地图：<code>CodeGlance</code></li>
+<li>Mybatis：<code>MyBatisX</code></li>
+<li>控制台日志美化：<code>Grep Console</code></li>
+<li>驼峰式命名和下划线命名交替变化：<code>CamelCase</code></li>
+</ul>
+</li>
+<li>非必装：<ul>
+<li>快捷键提示：<code>Key Promoter X</code></li>
+<li>代码统计：<code>Statistic</code></li>
+<li>Restful：<code>RestfulToolkit</code></li>
+<li>Json 生成 Java：<code>GsonFormat</code></li>
+<li>代码时序图：<code>SequenceDiagram</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="五、快捷键"><a href="#五、快捷键" class="headerlink" title="五、快捷键"></a>五、快捷键</h2><ul>
+<li><code>Import Settings</code> -&gt; <code>keymap-shkstart.jar</code></li>
+<li>常用快捷键：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">快捷键</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>alt + r</code></td>
+<td align="center">执行</td>
+</tr>
+<tr>
+<td align="center"><code>alt + /</code></td>
+<td align="center">提示补全</td>
+</tr>
+<tr>
+<td align="center"><code>ctrl + /</code></td>
+<td align="center">单行注释</td>
+</tr>
+<tr>
+<td align="center"><code>ctrl + shift + /</code></td>
+<td align="center">多行注释</td>
+</tr>
+<tr>
+<td align="center"><code>ctrl + alt + down</code></td>
+<td align="center">向下复制一行</td>
+</tr>
+<tr>
+<td align="center"><code>ctrl + d</code></td>
+<td align="center">删除一行或选中行</td>
+</tr>
+<tr>
+<td align="center"><code>alt + down</code></td>
+<td align="center">向下移动行</td>
+</tr>
+<tr>
+<td align="center"><code>alt + up</code></td>
+<td align="center">向上移动行</td>
+</tr>
+<tr>
+<td align="center"><code>shift + enter</code></td>
+<td align="center">向下开始新的一行</td>
+</tr>
+<tr>
+<td align="center"><code>ctrl + shift  +enter</code></td>
+<td align="center">向上开始新的一行</td>
+</tr>
+<tr>
+<td align="center"><code>ctrl + 选中 或 ctrl + shift + t</code></td>
+<td align="center">查看源码</td>
+</tr>
+<tr>
+<td align="center"><code>alt + enter</code></td>
+<td align="center">万能解错 / 生成返回值变量</td>
+</tr>
+<tr>
+<td align="center"><code>alt + left</code></td>
+<td align="center">退回到前一个编辑的页面</td>
+</tr>
+<tr>
+<td align="center"><code>alt + right</code></td>
+<td align="center">进入到下一个编辑的页面</td>
+</tr>
+<tr>
+<td align="center"><code>F4</code></td>
+<td align="center">查看继承关系</td>
+</tr>
+<tr>
+<td align="center"><code>ctrl + shift + F</code></td>
+<td align="center">格式化代码</td>
+</tr>
+<tr>
+<td align="center"><code>ctrl + alt + /</code></td>
+<td align="center">提示方法参数类型</td>
+</tr>
+<tr>
+<td align="center"><code>ctrl + c</code></td>
+<td align="center">复制代码</td>
+</tr>
+<tr>
+<td align="center"><code>ctrl + z</code></td>
+<td align="center">撤销</td>
+</tr>
+<tr>
+<td align="center"><code>ctrl + y</code></td>
+<td align="center">反撤销</td>
+</tr>
+<tr>
+<td align="center"><code>ctrl + x</code></td>
+<td align="center">剪切</td>
+</tr>
+<tr>
+<td align="center"><code>ctrl + v</code></td>
+<td align="center">粘贴</td>
+</tr>
+<tr>
+<td align="center"><code>ctrl + s</code></td>
+<td align="center">保存</td>
+</tr>
+<tr>
+<td align="center"><code>ctrl + a</code></td>
+<td align="center">全选</td>
+</tr>
+<tr>
+<td align="center"><code>tab</code></td>
+<td align="center">选中数行，整体往后移动</td>
+</tr>
+<tr>
+<td align="center"><code>shift + tab</code></td>
+<td align="center">选中数行，整体往前移动</td>
+</tr>
+<tr>
+<td align="center"><code>ctrl + o</code></td>
+<td align="center">查看类的结构：类似于 eclipse 的 outline</td>
+</tr>
+<tr>
+<td align="center"><code>alt + shift + r</code></td>
+<td align="center">重构： 修改变量名与方法名</td>
+</tr>
+<tr>
+<td align="center"><code>ctrl + shift + y</code></td>
+<td align="center">大写转小写 / 小写转大写</td>
+</tr>
+<tr>
+<td align="center"><code>alt +shift + s</code></td>
+<td align="center">生成构造器 / get / set / toString</td>
+</tr>
+<tr>
+<td align="center"><code>F2</code></td>
+<td align="center">查看文档说明</td>
+</tr>
+<tr>
+<td align="center"><code>alt + shift + c</code></td>
+<td align="center">收起所有的方法</td>
+</tr>
+<tr>
+<td align="center"><code>alt + shift + x</code></td>
+<td align="center">打开所有方法</td>
+</tr>
+<tr>
+<td align="center"><code>ctrl + shift + x</code></td>
+<td align="center">打开代码所在硬盘文件夹</td>
+</tr>
+<tr>
+<td align="center"><code>alt + shift + z</code></td>
+<td align="center">生成 try-catch 等</td>
+</tr>
+<tr>
+<td align="center"><code>alt + shift + f</code></td>
+<td align="center">局部变量抽取为成员变量</td>
+</tr>
+<tr>
+<td align="center"><code>ctrl + f</code></td>
+<td align="center">当前文件查找 / 替换</td>
+</tr>
+<tr>
+<td align="center"><code>ctrl + h</code></td>
+<td align="center">全局查找</td>
+</tr>
+<tr>
+<td align="center"><code>shift + shift</code></td>
+<td align="center">查找文件</td>
+</tr>
+<tr>
+<td align="center"><code>ctrl + shift + u</code></td>
+<td align="center">查看类的继承结构图</td>
+</tr>
+<tr>
+<td align="center"><code>ctrl + alt + h</code></td>
+<td align="center">查看方法的多层重写结构</td>
+</tr>
+<tr>
+<td align="center"><code>ctrl + alt + f</code></td>
+<td align="center">添加到收藏</td>
+</tr>
+<tr>
+<td align="center"><code>alt + shift + m</code></td>
+<td align="center">抽取方法</td>
+</tr>
+<tr>
+<td align="center"><code>ctrl + E</code></td>
+<td align="center">打开最近修改的文件</td>
+</tr>
+<tr>
+<td align="center"><code>ctrl + w</code></td>
+<td align="center">关闭当前打开的代码栏</td>
+</tr>
+<tr>
+<td align="center"><code>ctrl + shift + w</code></td>
+<td align="center">关闭打开的所有代码栏</td>
+</tr>
+<tr>
+<td align="center"><code>ctrl + shift + q</code></td>
+<td align="center">快速搜索类中的错误</td>
+</tr>
+<tr>
+<td align="center"><code>ctrl + shift + v</code></td>
+<td align="center">选择要粘贴的内容</td>
+</tr>
+<tr>
+<td align="center"><code>ctrl + shift + h</code></td>
+<td align="center">查找方法在哪里被调用</td>
+</tr>
+</tbody></table>
+<h2 id="六、其他"><a href="#六、其他" class="headerlink" title="六、其他"></a>六、其他</h2><h3 id="1-生成-Java-Doc"><a href="#1-生成-Java-Doc" class="headerlink" title="1. 生成 Java Doc"></a>1. 生成 Java Doc</h3><ul>
+<li><code>Tools</code> -&gt; <code>Generate JavaDoc</code><ul>
+<li>Locale：<code>zh_CN</code></li>
+<li>Other command line arguments：<code>-encoding UTF-8 -charset UTF-8</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="2-缓存和索引的清理"><a href="#2-缓存和索引的清理" class="headerlink" title="2. 缓存和索引的清理"></a>2. 缓存和索引的清理</h3><ul>
+<li>IntelliJ IDEA 首次加载项目的时候，都会创建索引。而创建索引的时间跟项目的文件多少成正比</li>
+<li>IDEA 的缓存和索引主要是用来加快文件查询，从而加快各种查找、代码提示等操作的速度。但是，在某些特殊条件下，IDEA 的缓存和索引文件也是会损坏的，比如：断电、蓝屏引起的强制关机，当重新打开 IDEA，很可能 IDEA 会报各种莫名其妙错误，甚至项目打不开</li>
+<li>清除：<code>File</code> -&gt; <code>Invalidate Caches / Restart</code> -&gt; <code>Invalidate and Restart</code></li>
+<li>清除索引和缓存会使得 IDEA 的 LocalHistory 丢失。可以将项目加入版本控制，或备份 LocalHistory 目录</li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>Java 开发环境搭建以及 IDEA 2020.1 详细配置</p><p><a href="https://lb477.xyz/Java/idea-config.html">https://lb477.xyz/Java/idea-config.html</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>LB</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2022-02-18</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2022-02-18</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Software/">Software</a><a class="link-muted mr-2" rel="tag" href="/tags/Java/">Java</a></div><div class="a2a_kit a2a_kit_size_32 a2a_default_style"><a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a><a class="a2a_button_facebook"></a><a class="a2a_button_twitter"></a><a class="a2a_button_telegram"></a><a class="a2a_button_whatsapp"></a><a class="a2a_button_reddit"></a></div><script src="https://static.addtoany.com/menu/page.js" defer></script></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">Like this article? Support the author with</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>Alipay</span><span class="qrcode"><img src="/img/alipay.png" alt="Alipay"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>Wechat</span><span class="qrcode"><img src="/img/wechat.png" alt="Wechat"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/Vue/vue-render.html"><span class="level-item">Vue main.js 中 render 配置项详解</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">Comments</h3><div class="content" id="valine-thread"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script><script>new Valine({
+            el: '#valine-thread',
+            appId: "GU0mw61vtgkNAOuvr9Ki9jMY-gzGzoHsz",
+            appKey: "5A97TX5HLLD2F1P8OKuq6qDt",
+            placeholder: "（づ￣3￣）づ╭❤～",
+            avatar: "wavatar",
+            avatarForce: false,
+            meta: ["nick","mail","link"],
+            pageSize: 10,
+            lang: "zh-CN",
+            visitor: false,
+            highlight: true,
+            recordIP: true,
+            
+            
+            
+            enableQQ: false,
+            requiredFields: [],
+        });</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">Catalogue</h3><ul class="menu-list"><li><a class="level is-mobile" href="#一、IDEA-概述"><span class="level-left"><span class="level-item">一、IDEA 概述</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-JetBrains-公司介绍"><span class="level-left"><span class="level-item">1. JetBrains 公司介绍</span></span></a></li><li><a class="level is-mobile" href="#2-IntelliJ-IDEA-介绍"><span class="level-left"><span class="level-item">2. IntelliJ IDEA 介绍</span></span></a></li><li><a class="level is-mobile" href="#3-下载安装"><span class="level-left"><span class="level-item">3. 下载安装</span></span></a></li><li><a class="level is-mobile" href="#4-调整-VM-配置"><span class="level-left"><span class="level-item">4. 调整 VM 配置</span></span></a></li></ul></li><li><a class="level is-mobile" href="#二、IDEA-设置"><span class="level-left"><span class="level-item">二、IDEA 设置</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-滚轮修改字体大小"><span class="level-left"><span class="level-item">1. 滚轮修改字体大小</span></span></a></li><li><a class="level is-mobile" href="#2-自动导包"><span class="level-left"><span class="level-item">2. 自动导包</span></span></a></li><li><a class="level is-mobile" href="#3-显示方法之间的分割线"><span class="level-left"><span class="level-item">3. 显示方法之间的分割线</span></span></a></li><li><a class="level is-mobile" href="#4-忽略大小写提示"><span class="level-left"><span class="level-item">4. 忽略大小写提示</span></span></a></li><li><a class="level is-mobile" href="#5-Tab-页多行显示"><span class="level-left"><span class="level-item">5. Tab 页多行显示</span></span></a></li><li><a class="level is-mobile" href="#6-代码字体"><span class="level-left"><span class="level-item">6. 代码字体</span></span></a></li><li><a class="level is-mobile" href="#7-类头注释"><span class="level-left"><span class="level-item">7. 类头注释</span></span></a></li><li><a class="level is-mobile" href="#8-文件编码"><span class="level-left"><span class="level-item">8. 文件编码</span></span></a></li><li><a class="level is-mobile" href="#9-关闭打开项目为最后关闭项目"><span class="level-left"><span class="level-item">9. 关闭打开项目为最后关闭项目</span></span></a></li><li><a class="level is-mobile" href="#10-去除-IDEA-自带的-iml-idea-文件"><span class="level-left"><span class="level-item">10. 去除 IDEA 自带的 .iml/.idea 文件</span></span></a></li><li><a class="level is-mobile" href="#11-注释格式"><span class="level-left"><span class="level-item">11. 注释格式</span></span></a></li><li><a class="level is-mobile" href="#12-Debuger"><span class="level-left"><span class="level-item">12. Debuger</span></span></a></li><li><a class="level is-mobile" href="#13-关闭自动更新"><span class="level-left"><span class="level-item">13. 关闭自动更新</span></span></a></li></ul></li><li><a class="level is-mobile" href="#三、其他软件及配置"><span class="level-left"><span class="level-item">三、其他软件及配置</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-JDK"><span class="level-left"><span class="level-item">1. JDK</span></span></a></li><li><a class="level is-mobile" href="#2-Maven"><span class="level-left"><span class="level-item">2. Maven</span></span></a></li><li><a class="level is-mobile" href="#3-Git"><span class="level-left"><span class="level-item">3. Git</span></span></a></li></ul></li><li><a class="level is-mobile" href="#四、插件"><span class="level-left"><span class="level-item">四、插件</span></span></a></li><li><a class="level is-mobile" href="#五、快捷键"><span class="level-left"><span class="level-item">五、快捷键</span></span></a></li><li><a class="level is-mobile" href="#六、其他"><span class="level-left"><span class="level-item">六、其他</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-生成-Java-Doc"><span class="level-left"><span class="level-item">1. 生成 Java Doc</span></span></a></li><li><a class="level is-mobile" href="#2-缓存和索引的清理"><span class="level-left"><span class="level-item">2. 缓存和索引的清理</span></span></a></li></ul></li></ul></div></div><script src="/js/toc.js" defer></script></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.svg" alt="Hi~" height="28"></a><p class="is-size-7"><span>&copy; 2022 LB</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><br><span id="busuanzi_container_site_uv">Visited by <span id="busuanzi_value_site_uv">0</span> users</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="fab fa-creative-commons-nc"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://s9.cnzz.com/z_stat.php?id=1280600932&amp;web_id=1280600932" async></script><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>
