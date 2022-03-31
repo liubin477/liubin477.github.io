@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Kafka 生产者详解 - Hi~</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="LB477"><meta name="msapplication-TileImage" content="/img/logo.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="LB477"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="文章对 Kafka 生产者发送原理进行了概述，给出了 Kafka Java API 的一些基本操作，介绍了生产者分区的原理，还讲述了如何提高生产者吞吐量、幂等性原理及生产者事务处理流程、数据重复问题、数据有序等"><meta property="og:type" content="blog"><meta property="og:title" content="Kafka 生产者详解"><meta property="og:url" content="https://lb477.xyz/BigData/Kafka/kafka-producer.html"><meta property="og:site_name" content="Hi~"><meta property="og:description" content="文章对 Kafka 生产者发送原理进行了概述，给出了 Kafka Java API 的一些基本操作，介绍了生产者分区的原理，还讲述了如何提高生产者吞吐量、幂等性原理及生产者事务处理流程、数据重复问题、数据有序等"><meta property="og:locale" content="en_US"><meta property="og:image" content="https://raw.githubusercontent.com/liubin477/blog-images/main/kafka-producer/producer-overview.png"><meta property="og:image" content="https://raw.githubusercontent.com/liubin477/blog-images/main/kafka-producer/producer-api1.png"><meta property="og:image" content="https://raw.githubusercontent.com/liubin477/blog-images/main/kafka-producer/producer-api2.png"><meta property="og:image" content="https://raw.githubusercontent.com/liubin477/blog-images/main/kafka-producer/producer-idempotence.png"><meta property="og:image" content="https://raw.githubusercontent.com/liubin477/blog-images/main/kafka-producer/producer-transactional.png"><meta property="og:image" content="https://raw.githubusercontent.com/liubin477/blog-images/main/kafka-producer/producer-ordered.png"><meta property="article:published_time" content="2022-03-25T06:50:47.000Z"><meta property="article:modified_time" content="2022-03-25T07:45:28.148Z"><meta property="article:author" content="LB"><meta property="article:tag" content="BigData"><meta property="article:tag" content="Kafka"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="https://raw.githubusercontent.com/liubin477/blog-images/main/kafka-producer/producer-overview.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://lb477.xyz/BigData/Kafka/kafka-producer.html"},"headline":"Kafka 生产者详解","image":["https://raw.githubusercontent.com/liubin477/blog-images/main/kafka-producer/producer-overview.png","https://raw.githubusercontent.com/liubin477/blog-images/main/kafka-producer/producer-api1.png","https://raw.githubusercontent.com/liubin477/blog-images/main/kafka-producer/producer-api2.png","https://raw.githubusercontent.com/liubin477/blog-images/main/kafka-producer/producer-idempotence.png","https://raw.githubusercontent.com/liubin477/blog-images/main/kafka-producer/producer-transactional.png","https://raw.githubusercontent.com/liubin477/blog-images/main/kafka-producer/producer-ordered.png"],"datePublished":"2022-03-25T06:50:47.000Z","dateModified":"2022-03-25T07:45:28.148Z","author":{"@type":"Person","name":"LB"},"publisher":{"@type":"Organization","name":"Hi~","logo":{"@type":"ImageObject","url":"https://lb477.xyz/img/logo.svg"}},"description":"文章对 Kafka 生产者发送原理进行了概述，给出了 Kafka Java API 的一些基本操作，介绍了生产者分区的原理，还讲述了如何提高生产者吞吐量、幂等性原理及生产者事务处理流程、数据重复问题、数据有序等"}</script><link rel="canonical" href="https://lb477.xyz/BigData/Kafka/kafka-producer.html"><link rel="icon" href="/img/logo.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/rainbow.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;600&amp;family=Roboto+Mono"><link rel="stylesheet" href="/css/cyberpunk.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?764850ecd30549010a0ac127697fcfeb";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><meta name="msvalidate.01" content="47ED542051E0F42DD56830929024860F"><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.4.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.svg" alt="Hi~" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/archives">Archives</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/liubin477"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="Catalogue" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-9-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2022-03-25T06:50:47.000Z" title="2022/3/25 下午2:50:47">2022-03-25</time></span><span class="level-item"><a class="link-muted" href="/categories/BigData/">BigData</a><span> / </span><a class="link-muted" href="/categories/BigData/Kafka/">Kafka</a></span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>&nbsp;visits</span></div></div><h1 class="title is-3 is-size-4-mobile">Kafka 生产者详解</h1><div class="content"><blockquote>
+<p>文章对 Kafka 生产者发送原理进行了概述，给出了 Kafka Java API 的一些基本操作，介绍了生产者分区的原理，还讲述了如何提高生产者吞吐量、幂等性原理及生产者事务处理流程、数据重复问题、数据有序等</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="一、生产者消息发送流程"><a href="#一、生产者消息发送流程" class="headerlink" title="一、生产者消息发送流程"></a>一、生产者消息发送流程</h2><h3 id="1-发送原理"><a href="#1-发送原理" class="headerlink" title="1. 发送原理"></a>1. 发送原理</h3><p><img src="https://raw.githubusercontent.com/liubin477/blog-images/main/kafka-producer/producer-overview.png" alt="producer-overview"></p>
+<ul>
+<li><strong>Interceptors</strong>：拦截器，对数据进行处理（可选，一般不用）</li>
+<li><strong>Serializer</strong>：序列化器，对数据序列化（Java 序列化器比较重，有效数据占比低）</li>
+<li><strong>Partitioner</strong>：分区器，对数据进行分区处理<ul>
+<li>分区过程在内存中完成，RecordAccumulator 是一个队列容器类，大小默认为 <strong>32M</strong>，一批次大小默认为 <strong>16K</strong></li>
+<li>双端队列，一边从内存池申请内存，一边释放内存</li>
+</ul>
+</li>
+<li><strong>Sender</strong>：将缓冲队列中的数据发送到 Kafka 集群<ul>
+<li>Sender 拉取数据条件：<ul>
+<li><strong>batch.size</strong>：批次数据量达到后发送，默认 <strong>16K</strong></li>
+<li><strong>linger.ms</strong>：批次数据量未达到 batch.size，经过 linger.ms 时间后发送，默认 <strong>0ms</strong>，表示直接发送</li>
+</ul>
+</li>
+<li>Sender 发送流程：<ul>
+<li>分区数据要发往不同的 Kafka 集群节点，以节点 broker id 为 key，需要发送的数据为 value，形成一个 request 请求，放在 InFlightRequests 中</li>
+<li>若请求没有及时应答，仍可以继续发送请求，但每个 Broker 节点最多缓存 <strong>5</strong> 个请求</li>
+<li>发送到 Kafka 集群之后，集群通过副本同步机制创建副本</li>
+<li><strong>Selector</strong>：打通发送数据到 Kafka 集群的链路</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>应答机制：<ul>
+<li>Kafka 应答级别 <strong>acks</strong><ul>
+<li><strong>0</strong>：生产者发送过来的数据，不需要等数据落盘应答</li>
+<li><strong>1</strong>：生产者发送过来的数据，Leader 收到数据后应答</li>
+<li><strong>-1/all</strong>：生产者发送过来的数据，Leader 和 ISR 队列里面的所有节点收齐数据后应答</li>
+</ul>
+</li>
+<li>若应答成功，生产者清理请求，并且清理对应分区的数据</li>
+<li>若应答失败，则请求重试，次数为 <strong>retries</strong>，默认为 int 的最大值，直到重试成功</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-生产者重要参数"><a href="#2-生产者重要参数" class="headerlink" title="2. 生产者重要参数"></a>2. 生产者重要参数</h3><table>
+<thead>
+<tr>
+<th>参数名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>bootstrap.servers</td>
+<td>生产者连接集群所需的 broker 地址清单。多个地址用逗号隔开</td>
+</tr>
+<tr>
+<td>key.serializer 和 value.serializer</td>
+<td>指定发送消息的 key 和 value 的序列化类型。写全类名</td>
+</tr>
+<tr>
+<td>buffer.memory</td>
+<td>RecordAccumulator 缓冲区总大小，默认 32M</td>
+</tr>
+<tr>
+<td>batch.size</td>
+<td>缓冲区一批数据的最大值，默认 16K。适当增加该值，可以提高吞吐量，但过大会导致延迟增加</td>
+</tr>
+<tr>
+<td>linger.ms</td>
+<td>如果数据迟迟未达到 batch.size，sender 等待 linger.time 后发送数据。默认 0ms，表示无延迟。建议 5-100ms</td>
+</tr>
+<tr>
+<td>acks</td>
+<td>见上文，默认 -1</td>
+</tr>
+<tr>
+<td>max.in.flight.requests.per.connection</td>
+<td>允许最多没有返回 ack 的次数，默认为 5，开启幂等性要保证该值是 1-5</td>
+</tr>
+<tr>
+<td>retries</td>
+<td>消息应答失败后的重试次数，默认 int 最大值</td>
+</tr>
+<tr>
+<td>retry.backoff.ms</td>
+<td>两次重试之间的时间间隔，默认 100ms</td>
+</tr>
+<tr>
+<td>enable.idempotence</td>
+<td>是否开启幂等性，默认 true</td>
+</tr>
+<tr>
+<td>compression.type</td>
+<td>生产者发送数据的压缩方式，默认是 none，即不压缩。可设置为 none、gzip、snappy、lz4 或 zstd</td>
+</tr>
+</tbody></table>
+<h2 id="二、发送-API"><a href="#二、发送-API" class="headerlink" title="二、发送 API"></a>二、发送 API</h2><h3 id="1-环境准备"><a href="#1-环境准备" class="headerlink" title="1. 环境准备"></a>1. 环境准备</h3><ul>
+<li>搭建 Maven 工程</li>
+<li>引入依赖：</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.kafka<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>kafka-clients<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.0.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>关键 API：</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/liubin477/blog-images/main/kafka-producer/producer-api1.png"></p>
+<p><img src="https://raw.githubusercontent.com/liubin477/blog-images/main/kafka-producer/producer-api2.png"></p>
+<h3 id="2-异步发送"><a href="#2-异步发送" class="headerlink" title="2. 异步发送"></a>2. 异步发送</h3><ul>
+<li>异步：外部数据无差别到缓冲队列</li>
+</ul>
+<h4 id="1-普通异步发送"><a href="#1-普通异步发送" class="headerlink" title="(1) 普通异步发送"></a>(1) 普通异步发送</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Properties properties = <span class="keyword">new</span> Properties();</span><br><span class="line">properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, <span class="string">&quot;hadoop100:9092,hadoop101:9092&quot;</span>);</span><br><span class="line">properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());</span><br><span class="line">properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());</span><br><span class="line"></span><br><span class="line">KafkaProducer&lt;String, String&gt; producer = <span class="keyword">new</span> KafkaProducer&lt;String, String&gt;(properties);</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) &#123;</span><br><span class="line">    <span class="comment">// 发送数据</span></span><br><span class="line">    producer.send(<span class="keyword">new</span> ProducerRecord&lt;String, String&gt;(<span class="string">&quot;test&quot;</span>, <span class="string">&quot;hello&quot;</span> + i));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">producer.close();</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-回调异步发送"><a href="#2-回调异步发送" class="headerlink" title="(2) 回调异步发送"></a>(2) 回调异步发送</h4><ul>
+<li>回调函数会在 producer 收到 ack 时调用，为异步调用</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) &#123;</span><br><span class="line">    producer.send(<span class="keyword">new</span> ProducerRecord&lt;String, String&gt;(<span class="string">&quot;test&quot;</span>, <span class="string">&quot;hello&quot;</span> + i), <span class="keyword">new</span> Callback() &#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCompletion</span><span class="params">(RecordMetadata metadata, Exception exception)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (exception == <span class="keyword">null</span>) &#123;  <span class="comment">// 回调成功（发送失败会自动重试，无需在回调中手动重试）</span></span><br><span class="line">                System.out.println(<span class="string">&quot;主题：&quot;</span> + metadata.topic() + <span class="string">&quot;，分区：&quot;</span> + metadata.partition());</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                exception.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    Thread.sleep(<span class="number">2</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 主题：test，分区：2</span></span><br><span class="line"><span class="comment">// 主题：test，分区：2</span></span><br><span class="line"><span class="comment">// 主题：test，分区：2</span></span><br><span class="line"><span class="comment">// 主题：test，分区：1</span></span><br><span class="line"><span class="comment">// 主题：test，分区：1</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-同步发送"><a href="#3-同步发送" class="headerlink" title="3. 同步发送"></a>3. 同步发送</h3><ul>
+<li>同步：外部数据分批次到缓冲队列，应答后再进下一批次</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) &#123;</span><br><span class="line">    producer.send(<span class="keyword">new</span> ProducerRecord&lt;String, String&gt;(<span class="string">&quot;test&quot;</span>, <span class="string">&quot;hello&quot;</span> + i), <span class="keyword">new</span> Callback() &#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCompletion</span><span class="params">(RecordMetadata metadata, Exception exception)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (exception == <span class="keyword">null</span>) &#123;  <span class="comment">// 回调成功（发送失败会自动重试，无需在回调中手动重试）</span></span><br><span class="line">                System.out.println(<span class="string">&quot;主题：&quot;</span> + metadata.topic() + <span class="string">&quot;，分区：&quot;</span> + metadata.partition());</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                exception.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;).get();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 主题：test，分区：0</span></span><br><span class="line"><span class="comment">// 主题：test，分区：2</span></span><br><span class="line"><span class="comment">// 主题：test，分区：0</span></span><br><span class="line"><span class="comment">// 主题：test，分区：1</span></span><br><span class="line"><span class="comment">// 主题：test，分区：0</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="三、生产者分区"><a href="#三、生产者分区" class="headerlink" title="三、生产者分区"></a>三、生产者分区</h2><h3 id="1-分区器作用"><a href="#1-分区器作用" class="headerlink" title="1. 分区器作用"></a>1. 分区器作用</h3><ul>
+<li><u>便于合理使用存储资源</u>：可以把海量的数据按照分区切割成一块一块数据存储在多台 Broker 上。合理控制分区的任务，可以实现负载均衡的效果（如根据服务器存储能力控制分区）</li>
+<li><u>提高并行度</u>：生产者可以以分区为单位发送数据，消费者可以以分区为单位消费数据（多线程）</li>
+</ul>
+<h3 id="2-分区策略"><a href="#2-分区策略" class="headerlink" title="2. 分区策略"></a>2. 分区策略</h3><ul>
+<li>默认分区器：DefaultPartitioner</li>
+<li><u>If a partition is specified in the record, use it</u></li>
+<li><u>If no partition is specified but a key is present, choose a partition based on a hash of the key</u>（如以表名为 key）</li>
+<li><u>If no partition or key is present, choose the sticky partition that changes when the batch is full</u>（随机选一个分区，待该分区 batch 已满或已完成，再随机选<strong>另</strong>一个分区）</li>
+</ul>
+<h3 id="3-自定义分区器"><a href="#3-自定义分区器" class="headerlink" title="3. 自定义分区器"></a>3. 自定义分区器</h3><ul>
+<li>实现 <code>Partitioner</code> 接口</li>
+<li>使用该分区器：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 此时若指定partition，还按指定的，否则按该分区器</span></span><br><span class="line">properties.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, MyPartitioner.class.getName());</span><br></pre></td></tr></table></figure>
+
+<h2 id="四、生产经验"><a href="#四、生产经验" class="headerlink" title="四、生产经验"></a>四、生产经验</h2><h3 id="1-提高吞吐量"><a href="#1-提高吞吐量" class="headerlink" title="1. 提高吞吐量"></a>1. 提高吞吐量</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// batch.size：批次大小，默认 16K</span></span><br><span class="line">properties.put(ProducerConfig.BATCH_SIZE_CONFIG, <span class="number">32</span> * <span class="number">1024</span>);</span><br><span class="line"><span class="comment">// linger.ms：等待时间，默认 0</span></span><br><span class="line">properties.put(ProducerConfig.LINGER_MS_CONFIG, <span class="number">100</span>);</span><br><span class="line"><span class="comment">// compression.type：压缩类型，默认 none，可选 gzip、snappy、lz4、zstd</span></span><br><span class="line">properties.put(ProducerConfig.COMPRESSION_TYPE_CONFIG, <span class="string">&quot;snappy&quot;</span>);</span><br><span class="line"><span class="comment">// buffer.memory：缓冲区大小，默认 32M</span></span><br><span class="line">properties.put(ProducerConfig.BUFFER_MEMORY_CONFIG, <span class="number">64</span> * <span class="number">1024</span> * <span class="number">1024</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-数据可靠性"><a href="#2-数据可靠性" class="headerlink" title="2. 数据可靠性"></a>2. 数据可靠性</h3><ul>
+<li>ack 为 0 时，<u>生产者发送的数据无需 Leader 落盘应答</u>。若 Leader 宕机时未落盘，则数据丢失。生产环境一般不用</li>
+<li>ack 为 1 时，<u>生产者发送的数据 Leader 落盘后应答</u>。  若 Leader 落盘应答后宕机，且尚未同步副本，则数据丢失。一般用于日志传输</li>
+<li>ack 为 -1 时，<u>生产者发送的数据 Leader 和 ISR 队列的节点落盘后应答</u>。一般用于可靠性要求高的场景，如金钱交易<ul>
+<li>如果分区副本设为 1 个，或者 ISR 里应答的最小副本数量（<strong>min.insync.replicas</strong>，默认 1）设为 1 个，此时相当于 ack 为 1</li>
+<li>数据完全可靠条件：<u>ack 级别为 -1，分区副本数大于 1，ISR 里应答的最小副本数大于 1</u></li>
+</ul>
+</li>
+</ul>
+<h4 id="ISR-队列"><a href="#ISR-队列" class="headerlink" title="ISR 队列"></a>ISR 队列</h4><ul>
+<li>Leader 维护了一个动态的 in-sync replica set（ISR）队列，表示<u>和 Leader 保持同步的 Follower + Leader 集合</u>（如 Leader: 0; ISR: 0,1,2）</li>
+<li>如果 Follower 一段时间（<strong>replica.lag.time.max.ms</strong>，默认 30s）未向 Leader 发送通信请求或同步数据，则该 Follower 会从 ISR 队列中移除</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// acks：应答策略，默认 -1</span></span><br><span class="line">properties.put(ProducerConfig.ACKS_CONFIG, <span class="string">&quot;all&quot;</span>);</span><br><span class="line"><span class="comment">// retries：重试次数，默认 int 最大值（2147483647）</span></span><br><span class="line">properties.put(ProducerConfig.RETRIES_CONFIG, <span class="number">3</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-数据去重"><a href="#3-数据去重" class="headerlink" title="3. 数据去重"></a>3. 数据去重</h3><ul>
+<li><u>ack 为 -1 时，若 Leader 和 ISR 队列的节点落盘后，Leader 未应答宕机，此时新的 Leader 仍会接收到数据，会导致重复数据</u></li>
+<li>Kafka 0.11 版本后，引入新特性：幂等性和事务</li>
+</ul>
+<h4 id="1-幂等性"><a href="#1-幂等性" class="headerlink" title="(1) 幂等性"></a>(1) 幂等性</h4><ul>
+<li>幂等性：<u>Producer 不论向 Broker 发送多少次重复数据，Broker 端都只会持久化一条，保证了不重复</u></li>
+<li>重复数据的判断标准：<u>具有 <code>&lt;PID, Partition, SeqNumber&gt;</code> 相同键的消息提交时，Broker 只会持久化一条</u><ul>
+<li><strong>PID</strong>：Kafka 每次重启都会分配一个新的</li>
+<li><strong>Partition</strong>：分区号</li>
+<li><strong>SeqNumber</strong>：单调自增，表示每一个请求</li>
+</ul>
+</li>
+<li>幂等性只能保证的是<u>在单分区单会话内不重复</u></li>
+<li>开启幂等性：<strong>enable.idempotence</strong>，默认 true</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/liubin477/blog-images/main/kafka-producer/producer-idempotence.png" alt="producer-idempotence"></p>
+<h4 id="2-生产者事务"><a href="#2-生产者事务" class="headerlink" title="(2) 生产者事务"></a>(2) 生产者事务</h4><ul>
+<li>幂等性保证的是单分区单会话内不重复，若 Kafka 重启，仍可能产生重复数据</li>
+<li>精确一次：<u>开启幂等性 + 开启事务 + 数据完全可靠条件</u></li>
+<li><u>事务底层依赖幂等性</u>，开启事务必须开启幂等性</li>
+<li>Producer 在使用事务功能前，必须先自定义一个唯一的 <strong>transactional.id</strong>。这样即使 Kafka 重启也能继续处理未完成的事务</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/liubin477/blog-images/main/kafka-producer/producer-transactional.png" alt="producer-transactional"></p>
+<ul>
+<li><u>事务协调器用于处理事务。事务在提交过程中需要将一些信息持久化到磁盘，该信息就存储在特定的主题中</u></li>
+<li>事务协调器的选择：<u>每个 Broker 节点都有事务协调器。存储事务信息的主题默认有 50 个分区，每个分区处理一部分事务。事务会选择分区 <code>hash(transactional.id) % 50</code> 对应的 Leader 副本所在的 Broker 节点中的事务协调器去处理</u></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">properties.put(ProducerConfig.TRANSACTIONAL_ID_CONFIG, <span class="string">&quot;transaction_test&quot;</span>);</span><br><span class="line">KafkaProducer&lt;String, String&gt; producer = <span class="keyword">new</span> KafkaProducer&lt;String, String&gt;(properties);</span><br><span class="line">producer.initTransactions();</span><br><span class="line">producer.beginTransaction();</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) &#123;</span><br><span class="line">        producer.send(<span class="keyword">new</span> ProducerRecord&lt;String, String&gt;(<span class="string">&quot;test&quot;</span>, <span class="string">&quot;&quot;</span>+i, <span class="string">&quot;hello&quot;</span> + i));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">1</span> / <span class="number">0</span>;</span><br><span class="line">&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    producer.abortTransaction();</span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    producer.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-数据有序"><a href="#4-数据有序" class="headerlink" title="4. 数据有序"></a>4. 数据有序</h3><ul>
+<li>生产者发送的数据会进行分区处理，因此消费者消费到的数据不一定是有序的</li>
+<li>单分区内有序：<ul>
+<li>Kafka 1.x 版本前，设置 max.in.flight.requests.per.connection = 1（不考虑幂等性）</li>
+<li>Kafka 1.x 版本后，<u>若未开启幂等性，则需设置 max.in.flight.requests.per.connection = 1；若开启幂等性，其值可设置为 1~5</u><ul>
+<li><u>每个节点默认最多缓存 5 个请求，开启幂等性后，Kafka 服务端会根据请求序列号按序落盘</u></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>多分区内有序：<u>消费者拉取每一个分区的数据，统一排序后消费</u></li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/liubin477/blog-images/main/kafka-producer/producer-ordered.png" alt="producer-ordered"></p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>Kafka 生产者详解</p><p><a href="https://lb477.xyz/BigData/Kafka/kafka-producer.html">https://lb477.xyz/BigData/Kafka/kafka-producer.html</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>LB</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2022-03-25</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2022-03-25</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/BigData/">BigData</a><a class="link-muted mr-2" rel="tag" href="/tags/Kafka/">Kafka</a></div><div class="a2a_kit a2a_kit_size_32 a2a_default_style"><a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a><a class="a2a_button_facebook"></a><a class="a2a_button_twitter"></a><a class="a2a_button_telegram"></a><a class="a2a_button_whatsapp"></a><a class="a2a_button_reddit"></a></div><script src="https://static.addtoany.com/menu/page.js" defer></script></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">Like this article? Support the author with</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>Alipay</span><span class="qrcode"><img src="/img/alipay.png" alt="Alipay"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>Wechat</span><span class="qrcode"><img src="/img/wechat.png" alt="Wechat"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/BigData/Kafka/kafka-helloworld.html"><span class="level-item">Kafka 入门</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">Comments</h3><div class="content" id="valine-thread"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script><script>new Valine({
+            el: '#valine-thread',
+            appId: "GU0mw61vtgkNAOuvr9Ki9jMY-gzGzoHsz",
+            appKey: "5A97TX5HLLD2F1P8OKuq6qDt",
+            placeholder: "（づ￣3￣）づ╭❤～",
+            avatar: "wavatar",
+            avatarForce: false,
+            meta: ["nick","mail","link"],
+            pageSize: 10,
+            lang: "zh-CN",
+            visitor: false,
+            highlight: true,
+            recordIP: true,
+            
+            
+            
+            enableQQ: false,
+            requiredFields: [],
+        });</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">Catalogue</h3><ul class="menu-list"><li><a class="level is-mobile" href="#一、生产者消息发送流程"><span class="level-left"><span class="level-item">一、生产者消息发送流程</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-发送原理"><span class="level-left"><span class="level-item">1. 发送原理</span></span></a></li><li><a class="level is-mobile" href="#2-生产者重要参数"><span class="level-left"><span class="level-item">2. 生产者重要参数</span></span></a></li></ul></li><li><a class="level is-mobile" href="#二、发送-API"><span class="level-left"><span class="level-item">二、发送 API</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-环境准备"><span class="level-left"><span class="level-item">1. 环境准备</span></span></a></li><li><a class="level is-mobile" href="#2-异步发送"><span class="level-left"><span class="level-item">2. 异步发送</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-普通异步发送"><span class="level-left"><span class="level-item">(1) 普通异步发送</span></span></a></li><li><a class="level is-mobile" href="#2-回调异步发送"><span class="level-left"><span class="level-item">(2) 回调异步发送</span></span></a></li></ul></li><li><a class="level is-mobile" href="#3-同步发送"><span class="level-left"><span class="level-item">3. 同步发送</span></span></a></li></ul></li><li><a class="level is-mobile" href="#三、生产者分区"><span class="level-left"><span class="level-item">三、生产者分区</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-分区器作用"><span class="level-left"><span class="level-item">1. 分区器作用</span></span></a></li><li><a class="level is-mobile" href="#2-分区策略"><span class="level-left"><span class="level-item">2. 分区策略</span></span></a></li><li><a class="level is-mobile" href="#3-自定义分区器"><span class="level-left"><span class="level-item">3. 自定义分区器</span></span></a></li></ul></li><li><a class="level is-mobile" href="#四、生产经验"><span class="level-left"><span class="level-item">四、生产经验</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-提高吞吐量"><span class="level-left"><span class="level-item">1. 提高吞吐量</span></span></a></li><li><a class="level is-mobile" href="#2-数据可靠性"><span class="level-left"><span class="level-item">2. 数据可靠性</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#ISR-队列"><span class="level-left"><span class="level-item">ISR 队列</span></span></a></li></ul></li><li><a class="level is-mobile" href="#3-数据去重"><span class="level-left"><span class="level-item">3. 数据去重</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-幂等性"><span class="level-left"><span class="level-item">(1) 幂等性</span></span></a></li><li><a class="level is-mobile" href="#2-生产者事务"><span class="level-left"><span class="level-item">(2) 生产者事务</span></span></a></li></ul></li><li><a class="level is-mobile" href="#4-数据有序"><span class="level-left"><span class="level-item">4. 数据有序</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.svg" alt="Hi~" height="28"></a><p class="is-size-7"><span>&copy; 2022 LB</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><br><span id="busuanzi_container_site_uv">Visited by <span id="busuanzi_value_site_uv">0</span> users</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="fab fa-creative-commons-nc"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://s9.cnzz.com/z_stat.php?id=1280600932&amp;web_id=1280600932" async></script><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>
